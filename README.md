@@ -1,2 +1,2 @@
-# web-demo-repository
+# Webマーケのデモリポジトリへようこそ
 web-demo-repository
