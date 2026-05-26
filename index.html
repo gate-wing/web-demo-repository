@@ -1,0 +1,2227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RISTORANTE NERO — 銀座</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ===========================
+     CSS VARIABLES
+  =========================== */
+  :root {
+    --burgundy:     #9B2540;
+    --burgundy-mid: #BC3255;
+    --gold:         #C9A84C;
+    --gold-light:   #E8C96A;
+    --gold-dim:     #9B7D38;
+    --black:        #080608;
+    --black-warm:   #0E0A0B;
+    --charcoal:     #1A1316;
+    --charcoal-mid: #261E21;
+    --cream:        #F5EDD6;
+    --cream-dim:    #C8B99A;
+    --white:        #FAF6EF;
+    --font-display: 'Playfair Display', 'HiraMinProN-W3', 'Hiragino Mincho ProN', serif;
+    --font-body:    'Cormorant Garamond', 'HiraMinProN-W3', 'Hiragino Mincho ProN', serif;
+    --font-alt:     'EB Garamond', serif;
+  }
+
+  /* ===========================
+     RESET & BASE
+  =========================== */
+  *, *::before, *::after {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ===========================
+     CUSTOM CURSOR
+  =========================== */
+  .cursor {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+  }
+
+  .cursor-ring {
+    position: fixed;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(201, 168, 76, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  body:hover .cursor { opacity: 1; }
+
+  /* ===========================
+     SCROLLBAR
+  =========================== */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+  /* ===========================
+     NAVIGATION
+  =========================== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 1.5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.6s ease;
+  }
+
+  nav.scrolled {
+    background: rgba(8, 6, 8, 0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+    padding: 1rem 3rem;
+  }
+
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-family: var(--font-alt);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-reserve {
+    font-family: var(--font-alt);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 0.6rem 1.6rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nav-reserve::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: rgba(255,255,255,0.15);
+    transition: left 0.4s ease;
+  }
+
+  .nav-reserve:hover::before { left: 100%; }
+  .nav-reserve:hover { background: var(--gold-light); }
+
+  /* ===========================
+     ORNAMENT DIVIDER
+  =========================== */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+
+  .ornament-line {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim));
+  }
+
+  .ornament-line.right {
+    background: linear-gradient(to left, transparent, var(--gold-dim));
+  }
+
+  .ornament-diamond {
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .ornament-diamond-sm {
+    width: 3px;
+    height: 3px;
+    background: var(--gold-dim);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  /* ===========================
+     SECTION LABEL
+  =========================== */
+  .section-label {
+    font-family: var(--font-alt);
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ===========================
+     HERO SECTION
+  =========================== */
+  #home {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 70% 50%, rgba(155, 37, 64, 0.5) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 30% 70%, rgba(40, 12, 20, 0.8) 0%, transparent 65%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, #220D14 0%, #080608 100%);
+  }
+
+  /* Simulated plate / food visual */
+  .hero-plate {
+    position: absolute;
+    right: 8%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 40% 40%, rgba(201, 168, 76, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 60% 60%, rgba(155, 37, 64, 0.4) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, #281018 20%, #0E0A0B 100%);
+    box-shadow:
+      0 0 80px rgba(155, 37, 64, 0.45),
+      0 0 160px rgba(155, 37, 64, 0.2),
+      inset 0 0 40px rgba(201, 168, 76, 0.06);
+    opacity: 0.9;
+  }
+
+  .hero-plate::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(201, 168, 76, 0.12);
+  }
+
+  .hero-plate::after {
+    content: '';
+    position: absolute;
+    inset: 28px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 38% 38%, rgba(201, 168, 76, 0.15) 0%, transparent 40%),
+      radial-gradient(circle at 65% 55%, rgba(180, 60, 40, 0.2) 0%, transparent 30%),
+      #140D0F;
+    box-shadow: inset 0 8px 40px rgba(0,0,0,0.8);
+  }
+
+  /* Steam effect */
+  .steam {
+    position: absolute;
+    right: calc(8% + 180px);
+    top: calc(50% - 260px);
+    display: flex;
+    gap: 8px;
+  }
+
+  .steam span {
+    display: block;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(to top, rgba(255,255,255,0.0), rgba(255,255,255,0.06), rgba(255,255,255,0.0));
+    animation: steamRise 3s ease-in-out infinite;
+  }
+
+  .steam span:nth-child(1) { height: 50px; animation-delay: 0s; }
+  .steam span:nth-child(2) { height: 70px; animation-delay: 0.6s; margin-top: 10px; }
+  .steam span:nth-child(3) { height: 45px; animation-delay: 1.2s; }
+
+  @keyframes steamRise {
+    0%   { transform: translateY(0) scaleX(1); opacity: 0; }
+    30%  { opacity: 1; }
+    70%  { opacity: 0.5; }
+    100% { transform: translateY(-30px) scaleX(2); opacity: 0; }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+    padding: 0 4rem;
+    margin-left: 6%;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-alt);
+    font-size: 0.7rem;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.3s;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 400;
+    line-height: 0.95;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+    opacity: 0;
+    animation: fadeUp 1.1s ease forwards 0.5s;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-title .line-alt {
+    display: block;
+    font-size: clamp(2.8rem, 5.5vw, 5rem);
+    color: var(--cream-dim);
+    letter-spacing: 0.12em;
+  }
+
+  .hero-tagline {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream-dim);
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+    margin: 1.8rem 0 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1.1s ease forwards 0.8s;
+    max-width: 380px;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 1.1s ease forwards 1.1s;
+  }
+
+  .btn-primary {
+    font-family: var(--font-alt);
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 1rem 2.5rem;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    display: inline-block;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+
+  .btn-primary:hover::after { transform: translateX(100%); }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .btn-secondary {
+    font-family: var(--font-alt);
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: color 0.3s ease;
+  }
+
+  .btn-secondary::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--gold-dim);
+    transition: width 0.3s ease;
+  }
+
+  .btn-secondary:hover { color: var(--gold); }
+  .btn-secondary:hover::before { width: 30px; background: var(--gold); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    opacity: 0;
+    animation: fadeIn 1s ease forwards 1.8s;
+  }
+
+  .hero-scroll span {
+    font-family: var(--font-alt);
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    animation: scrollPulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+    50%  { transform: scaleY(1); transform-origin: top; }
+    51%  { transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; opacity: 0.3; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ===========================
+     CONCEPT SECTION
+  =========================== */
+  #concept {
+    background: var(--black-warm);
+    padding: 10rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #concept::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(155, 37, 64, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .concept-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: center;
+  }
+
+  .concept-visual {
+    position: relative;
+  }
+
+  .concept-frame {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background:
+      radial-gradient(ellipse at 35% 35%, rgba(201, 168, 76, 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 65%, rgba(155, 37, 64, 0.4) 0%, transparent 55%),
+      linear-gradient(160deg, #251018 0%, #0D0810 100%);
+    border: 1px solid rgba(201, 168, 76, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .concept-frame::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 1px solid rgba(201, 168, 76, 0.06);
+    pointer-events: none;
+  }
+
+  /* Simulated wine glass silhouette */
+  .wine-glass-svg {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.18;
+  }
+
+  .concept-badge {
+    position: absolute;
+    bottom: -1.5rem;
+    right: -1.5rem;
+    width: 110px;
+    height: 110px;
+    background: var(--burgundy-mid);
+    border: 1px solid rgba(201, 168, 76, 0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+  }
+
+  .concept-badge .year {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .concept-badge .est {
+    font-family: var(--font-alt);
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+  }
+
+  .concept-text { position: relative; }
+
+  .concept-text h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 3.5vw, 3rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--cream);
+    margin: 1rem 0 2rem;
+  }
+
+  .concept-text h2 em {
+    font-style: italic;
+    color: var(--gold);
+    display: block;
+  }
+
+  .concept-text p {
+    font-size: 1rem;
+    line-height: 2;
+    color: var(--cream-dim);
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+
+  .concept-stat {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(201, 168, 76, 0.12);
+  }
+
+  .stat-item {}
+
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-label {
+    font-family: var(--font-alt);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    margin-top: 0.3rem;
+    display: block;
+  }
+
+  /* ===========================
+     MENU SECTION
+  =========================== */
+  #menu {
+    background: var(--black);
+    padding: 10rem 0;
+    position: relative;
+  }
+
+  #menu::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201, 168, 76, 0.2), transparent);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 6rem;
+    padding: 0 2rem;
+  }
+
+  .section-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.1;
+    margin: 0.8rem 0;
+  }
+
+  .section-header h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .section-header p {
+    font-size: 0.95rem;
+    color: var(--cream-dim);
+    font-style: italic;
+    font-weight: 300;
+    max-width: 440px;
+    margin: 1rem auto 0;
+    line-height: 1.9;
+  }
+
+  /* Signature Course */
+  .signature-course {
+    max-width: 1100px;
+    margin: 0 auto 6rem;
+    padding: 0 4rem;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .course-visual {
+    aspect-ratio: 4/3;
+    background:
+      radial-gradient(circle at 45% 40%, rgba(201, 168, 76, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 60% 60%, rgba(155, 37, 64, 0.45) 0%, transparent 45%),
+      linear-gradient(145deg, #261018, #0C0809);
+    border: 1px solid rgba(201, 168, 76, 0.1);
+    position: relative;
+  }
+
+  .course-visual::before {
+    content: 'SIGNATURE';
+    position: absolute;
+    top: 1.2rem; left: 1.5rem;
+    font-family: var(--font-alt);
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  /* decorative dish */
+  .dish-circle {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, rgba(201,168,76,0.1) 0%, rgba(155,37,64,0.28) 50%, rgba(0,0,0,0.5) 100%);
+    border: 1px solid rgba(201,168,76,0.12);
+    box-shadow: 0 0 40px rgba(155,37,64,0.4), inset 0 0 20px rgba(0,0,0,0.6);
+  }
+
+  .dish-circle::before {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.07);
+  }
+
+  .course-info {}
+
+  .course-type {
+    font-family: var(--font-alt);
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  .course-name {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 0.8rem;
+  }
+
+  .course-name em {
+    font-style: italic;
+    color: var(--gold);
+    font-size: 1.8rem;
+    display: block;
+  }
+
+  .course-desc {
+    font-size: 0.95rem;
+    color: var(--cream-dim);
+    line-height: 2;
+    font-style: italic;
+    margin-bottom: 2rem;
+  }
+
+  .course-dishes {
+    list-style: none;
+    margin-bottom: 2.5rem;
+  }
+
+  .course-dishes li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.07);
+    font-size: 0.9rem;
+    color: var(--cream-dim);
+  }
+
+  .course-dishes li::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .course-price {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--gold);
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  .price-unit {
+    font-family: var(--font-alt);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--gold-dim);
+  }
+
+  /* Menu Grid (Alacarte) */
+  .menu-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+
+  .menu-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+    margin-bottom: 3rem;
+    justify-content: center;
+  }
+
+  .menu-tab {
+    font-family: var(--font-alt);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    padding: 0.8rem 2rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.3s ease;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  .menu-tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  .menu-tab:hover { color: var(--gold); }
+
+  .menu-panel {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .menu-panel.active { display: grid; }
+
+  .menu-item {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.07);
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 2rem;
+    transition: background 0.2s;
+  }
+
+  .menu-item:nth-child(odd) { padding-right: 3rem; }
+  .menu-item:nth-child(even) { padding-left: 3rem; border-left: 1px solid rgba(201, 168, 76, 0.07); }
+
+  .menu-item-info {}
+
+  .menu-item-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+
+  .menu-item-name em {
+    font-style: italic;
+    color: var(--cream-dim);
+    font-size: 0.85rem;
+    display: block;
+    margin-top: 0.1rem;
+  }
+
+  .menu-item-desc {
+    font-size: 0.8rem;
+    color: rgba(200, 185, 154, 0.6);
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .menu-item-price {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--gold);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ===========================
+     WINE SECTION
+  =========================== */
+  .wine-section {
+    background: linear-gradient(to bottom, #08060A, #0E080D);
+    padding: 6rem 0;
+    position: relative;
+    overflow: hidden;
+    margin-top: 6rem;
+  }
+
+  .wine-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 80px,
+      rgba(201, 168, 76, 0.015) 80px,
+      rgba(201, 168, 76, 0.015) 81px
+    );
+  }
+
+  .wine-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 4rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .wine-heading {}
+
+  .wine-heading h3 {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--cream);
+    margin: 0.8rem 0 1.5rem;
+  }
+
+  .wine-heading h3 em {
+    font-style: italic;
+    color: var(--gold);
+    display: block;
+  }
+
+  .wine-heading p {
+    font-size: 0.9rem;
+    color: var(--cream-dim);
+    line-height: 2;
+    font-style: italic;
+  }
+
+  .wine-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .wine-item {
+    padding: 1.4rem 1.8rem;
+    background: rgba(201, 168, 76, 0.03);
+    border: 1px solid rgba(201, 168, 76, 0.08);
+    transition: all 0.3s ease;
+  }
+
+  .wine-item:hover {
+    background: rgba(155, 37, 64, 0.18);
+    border-color: rgba(201, 168, 76, 0.2);
+  }
+
+  .wine-region {
+    font-family: var(--font-alt);
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .wine-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--cream);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .wine-note {
+    font-size: 0.78rem;
+    color: rgba(200, 185, 154, 0.55);
+    font-style: italic;
+  }
+
+  /* ===========================
+     GALLERY / ACCESS SECTION
+  =========================== */
+  #access {
+    background: var(--charcoal);
+    padding: 10rem 0;
+    position: relative;
+  }
+
+  .gallery-grid {
+    max-width: 1200px;
+    margin: 0 auto 6rem;
+    padding: 0 4rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 3px;
+  }
+
+  .gallery-item {
+    background: var(--charcoal-mid);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .gallery-item:first-child {
+    grid-row: 1 / 3;
+  }
+
+  .gallery-cell {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .gallery-item:hover .gallery-cell { transform: scale(1.03); }
+
+  /* Each gallery cell uses a unique toned background to simulate photography */
+  .gc-1 {
+    background:
+      radial-gradient(circle at 40% 40%, rgba(201,168,76,0.1) 0%, transparent 55%),
+      radial-gradient(circle at 65% 70%, rgba(155,37,64,0.42) 0%, transparent 50%),
+      linear-gradient(160deg, #281018, #0C0809);
+    min-height: 460px;
+  }
+
+  .gc-2 {
+    background:
+      radial-gradient(circle at 55% 45%, rgba(201,168,76,0.1) 0%, transparent 50%),
+      linear-gradient(130deg, #160C10, #0A0709);
+  }
+
+  .gc-3 {
+    background:
+      radial-gradient(circle at 40% 55%, rgba(155,37,64,0.45) 0%, transparent 50%),
+      linear-gradient(170deg, #240F18, #0E0A0B);
+  }
+
+  .gc-4 {
+    background:
+      radial-gradient(circle at 50% 50%, rgba(201,168,76,0.06) 0%, transparent 55%),
+      linear-gradient(150deg, #180E13, #0B0709);
+  }
+
+  .gc-5 {
+    background:
+      radial-gradient(circle at 45% 40%, rgba(155,37,64,0.38) 0%, transparent 50%),
+      linear-gradient(135deg, #22101A, #0C0809);
+  }
+
+  .gallery-label {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    font-family: var(--font-alt);
+    font-size: 0.58rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(201, 168, 76, 0.5);
+  }
+
+  /* Access Info */
+  .access-info {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+  }
+
+  .access-map {
+    background:
+      linear-gradient(135deg, #141015, #0D0A0F);
+    border: 1px solid rgba(201, 168, 76, 0.1);
+    min-height: 320px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle grid lines for map suggestion */
+  .access-map::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(201,168,76,0.04) 30px, rgba(201,168,76,0.04) 31px),
+      repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(201,168,76,0.04) 30px, rgba(201,168,76,0.04) 31px);
+  }
+
+  .map-pin {
+    position: absolute;
+    top: 45%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .map-pin-dot {
+    width: 12px;
+    height: 12px;
+    background: var(--burgundy);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    position: relative;
+    animation: pinPulse 2.5s ease-in-out infinite;
+  }
+
+  .map-pin-ring {
+    position: absolute;
+    top: -12px; left: -12px;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%;
+    animation: pinRing 2.5s ease-in-out infinite;
+  }
+
+  .map-pin-label {
+    position: absolute;
+    top: -2.2rem; left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-family: var(--font-alt);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  @keyframes pinPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
+    50%       { box-shadow: 0 0 0 8px rgba(201,168,76,0); }
+  }
+
+  @keyframes pinRing {
+    0%   { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+
+  .access-details {}
+
+  .access-details h3 {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin: 0.8rem 0 2rem;
+  }
+
+  .info-row {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.07);
+    align-items: start;
+  }
+
+  .info-row-label {
+    font-family: var(--font-alt);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    min-width: 70px;
+    padding-top: 2px;
+  }
+
+  .info-row-value {
+    font-size: 0.9rem;
+    color: var(--cream-dim);
+    line-height: 1.8;
+  }
+
+  .info-row-value a {
+    color: var(--gold);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .info-row-value a:hover { color: var(--gold-light); }
+
+  /* ===========================
+     RESERVATION SECTION
+  =========================== */
+  #reservation {
+    background: var(--black-warm);
+    padding: 10rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #reservation::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.1), transparent);
+  }
+
+  .reservation-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+
+  .reservation-form {
+    margin-top: 3rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    position: relative;
+  }
+
+  .form-group.full { grid-column: 1 / -1; }
+
+  .form-label {
+    font-family: var(--font-alt);
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    background: rgba(201, 168, 76, 0.03);
+    border: 1px solid rgba(201, 168, 76, 0.12);
+    color: var(--cream);
+    padding: 0.9rem 1.2rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s ease, background 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
+  .form-select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23C9A84C' opacity='0.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+
+  .form-select option {
+    background: var(--charcoal);
+    color: var(--cream);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.8;
+  }
+
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    border-color: rgba(201, 168, 76, 0.4);
+    background: rgba(201, 168, 76, 0.05);
+  }
+
+  .form-input::placeholder,
+  .form-textarea::placeholder { color: rgba(200, 185, 154, 0.25); }
+
+  .form-submit {
+    width: 100%;
+    margin-top: 1rem;
+    background: var(--gold);
+    border: none;
+    color: var(--black);
+    font-family: var(--font-alt);
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    padding: 1.2rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+  }
+
+  .form-submit::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+
+  .form-submit:hover::after { transform: translateX(100%); }
+  .form-submit:hover { background: var(--gold-light); }
+
+  .form-note {
+    font-size: 0.78rem;
+    color: rgba(200,185,154,0.4);
+    font-style: italic;
+    text-align: center;
+    margin-top: 1.2rem;
+    line-height: 1.7;
+  }
+
+  /* ===========================
+     FOOTER
+  =========================== */
+  footer {
+    background: var(--black);
+    padding: 4rem 0 2.5rem;
+    border-top: 1px solid rgba(201, 168, 76, 0.08);
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+
+  .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.06);
+    margin-bottom: 2rem;
+    gap: 4rem;
+  }
+
+  .footer-brand {}
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-tagline {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--cream-dim);
+    opacity: 0.6;
+  }
+
+  .footer-nav {}
+
+  .footer-nav h4 {
+    font-family: var(--font-alt);
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1rem;
+  }
+
+  .footer-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .footer-nav a {
+    font-size: 0.88rem;
+    color: var(--cream-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+    opacity: 0.7;
+  }
+
+  .footer-nav a:hover { color: var(--gold); opacity: 1; }
+
+  .footer-contact h4 {
+    font-family: var(--font-alt);
+    font-size: 0.62rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1rem;
+  }
+
+  .footer-contact p {
+    font-size: 0.88rem;
+    color: var(--cream-dim);
+    opacity: 0.7;
+    line-height: 2;
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy {
+    font-family: var(--font-alt);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: rgba(200,185,154,0.3);
+  }
+
+  .footer-sns {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-sns a {
+    font-family: var(--font-alt);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(200,185,154,0.3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-sns a:hover { color: var(--gold); }
+
+  /* ===========================
+     SCROLL REVEAL
+  =========================== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.35s; }
+  .reveal-delay-4 { transition-delay: 0.5s; }
+
+  /* ===========================
+     FLOATING RESERVE
+  =========================== */
+  .floating-reserve {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 900;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+    pointer-events: none;
+  }
+
+  .floating-reserve.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .floating-reserve a {
+    font-family: var(--font-alt);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 0.9rem 1.8rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    box-shadow: 0 4px 30px rgba(201,168,76,0.25);
+    transition: all 0.3s ease;
+  }
+
+  .floating-reserve a::before {
+    content: '◆';
+    font-size: 0.4rem;
+    color: rgba(0,0,0,0.5);
+  }
+
+  .floating-reserve a:hover {
+    background: var(--gold-light);
+    box-shadow: 0 6px 40px rgba(201,168,76,0.4);
+  }
+
+  /* ===========================
+     RESPONSIVE
+  =========================== */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    nav.scrolled { padding: 0.8rem 1.5rem; }
+    .nav-links { display: none; }
+
+    .hero-content { margin-left: 0; padding: 0 2rem; text-align: center; }
+    .hero-cta { justify-content: center; }
+    .hero-plate { display: none; }
+    .steam { display: none; }
+
+    .concept-inner { grid-template-columns: 1fr; gap: 4rem; padding: 0 2rem; }
+    .concept-visual { max-width: 400px; margin: 0 auto; }
+
+    .signature-course { grid-template-columns: 1fr; gap: 3rem; padding: 0 2rem; }
+    .menu-panel { grid-template-columns: 1fr; }
+    .menu-item:nth-child(even) { border-left: none; padding-left: 0; }
+    .menu-grid { padding: 0 2rem; }
+    .menu-item:nth-child(odd) { padding-right: 0; }
+
+    .wine-inner { grid-template-columns: 1fr; gap: 3rem; padding: 0 2rem; }
+    .wine-list { grid-template-columns: 1fr; }
+
+    .gallery-grid { grid-template-columns: 1fr 1fr; padding: 0 2rem; }
+    .gallery-item:first-child { grid-column: 1 / -1; grid-row: auto; }
+    .gc-1 { min-height: 250px; }
+
+    .access-info { grid-template-columns: 1fr; gap: 3rem; padding: 0 2rem; }
+
+    .reservation-inner { padding: 0 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+
+    .footer-top { flex-direction: column; gap: 2.5rem; padding: 0 2rem 2.5rem; }
+    .footer-inner { padding: 0 2rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+
+    .section-header { padding: 0 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Navigation -->
+<nav id="mainNav">
+  <a href="#home" class="nav-logo">Ristorante Nero</a>
+  <ul class="nav-links">
+    <li><a href="#concept">Concept</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#access">Access</a></li>
+    <li><a href="#reservation" class="nav-reserve">Reserve</a></li>
+  </ul>
+</nav>
+
+<!-- Floating Reserve Button -->
+<div class="floating-reserve" id="floatingReserve">
+  <a href="#reservation">Reserve a Table</a>
+</div>
+
+<!-- ========================
+     HOME
+========================= -->
+<section id="home">
+  <div class="hero-bg"></div>
+  <div class="steam">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="hero-plate"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Ginza, Tokyo — Since 1994</p>
+    <h1 class="hero-title">
+      La Vera
+      <em>Italia</em>
+      <span class="line-alt">a Tavola.</span>
+    </h1>
+    <p class="hero-tagline">
+      暗闇の中に灯る一皿。<br>
+      北イタリアの風土が薫る、<br>魅惑的な食の体験。
+    </p>
+    <div class="hero-cta">
+      <a href="#reservation" class="btn-primary">Reserve a Table</a>
+      <a href="#menu" class="btn-secondary">View Menu</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ========================
+     CONCEPT
+========================= -->
+<section id="concept">
+  <div class="concept-inner">
+    <div class="concept-visual reveal">
+      <div class="concept-frame">
+        <svg class="wine-glass-svg" width="120" height="280" viewBox="0 0 120 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M35 10 Q20 80 20 120 Q20 180 60 200 L60 260 L30 270 L90 270 L60 260 L60 200 Q100 180 100 120 Q100 80 85 10 Z" stroke="rgba(201,168,76,0.4)" stroke-width="1.5" fill="none"/>
+          <ellipse cx="60" cy="10" rx="25" ry="5" stroke="rgba(201,168,76,0.2)" stroke-width="1" fill="none"/>
+          <path d="M25 80 Q60 160 95 80" fill="rgba(92,20,32,0.25)" stroke="none"/>
+        </svg>
+      </div>
+      <div class="concept-badge">
+        <span class="year">1994</span>
+        <span class="est">Established</span>
+      </div>
+    </div>
+
+    <div class="concept-text">
+      <span class="section-label">Our Story</span>
+      <h2 class="reveal reveal-delay-1">
+        大地と記憶が<br>
+        <em>宿る一皿へ</em>
+      </h2>
+      <p class="reveal reveal-delay-2">
+        ピエモンテの霧深い丘に生まれた総料理長・古賀誠一は、
+        20年にわたりイタリア各地の食文化を体に刻み込んできた。
+        その指先が生む料理は、単なる「食事」ではない。
+        大地の記憶と季節の情感が宿る、時間芸術である。
+      </p>
+      <p class="reveal reveal-delay-3">
+        白トリュフ、バローロ種の黒豚、アルベンガ産のアスパラガス——
+        産地に敬意を払い、最小限の技法で素材の魂を解き放つ。
+        それが、Ristorante Neroの哲学。
+      </p>
+      <div class="concept-stat reveal reveal-delay-4">
+        <div class="stat-item">
+          <span class="stat-num">30+</span>
+          <span class="stat-label">Years of Excellence</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">18</span>
+          <span class="stat-label">Seats Only</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">★★</span>
+          <span class="stat-label">Michelin Stars</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================
+     MENU
+========================= -->
+<section id="menu">
+  <div class="section-header reveal">
+    <span class="section-label">Cucina</span>
+    <h2>季節の <em>お食事</em></h2>
+    <p>旬の食材が語る、その日だけの物語。<br>シェフの感性と大自然の恵みが交わる食卓へ。</p>
+  </div>
+
+  <!-- Signature Course -->
+  <div class="signature-course">
+    <div class="course-visual reveal">
+      <div class="dish-circle"></div>
+    </div>
+    <div class="course-info reveal reveal-delay-2">
+      <span class="course-type">Signature Course — Spring / Summer 2026</span>
+      <h3 class="course-name">
+        Il Percorso
+        <em>della Stagione</em>
+      </h3>
+      <p class="course-desc">
+        季節の移ろいを7つの章で描く、<br>
+        シェフのシグネチャーコース。
+      </p>
+      <ul class="course-dishes">
+        <li>山菜と白ワインのリゾット、山葵の泡</li>
+        <li>生ホタテのカルパッチョ、ヘーゼルナッツ</li>
+        <li>白トリュフ薫る、タリオリーニ</li>
+        <li>イベリコ豚のロースト、バルサミコ</li>
+        <li>熟成チーズの盛り合わせ</li>
+        <li>苺とマスカルポーネのドルチェ</li>
+        <li>小菓子とカフェ</li>
+      </ul>
+      <div class="course-price">
+        <span>¥32,000</span>
+        <span class="price-unit">/ person (税・サ別)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- A la Carte -->
+  <div class="menu-grid reveal">
+    <div class="menu-tabs">
+      <button class="menu-tab active" data-tab="antipasti">Antipasti</button>
+      <button class="menu-tab" data-tab="pasta">Pasta</button>
+      <button class="menu-tab" data-tab="secondi">Secondi</button>
+      <button class="menu-tab" data-tab="dolci">Dolci</button>
+    </div>
+
+    <div class="menu-panel active" id="tab-antipasti">
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Carpaccio di Capesante<em>生帆立のカルパッチョ</em></p>
+          <p class="menu-item-desc">レモンの泡、エキストラヴァージンオイル</p>
+        </div>
+        <span class="menu-item-price">¥3,800</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Burrata e Pomodori<em>ブラータとトマト</em></p>
+          <p class="menu-item-desc">アーリオリグーレ、バジリコ</p>
+        </div>
+        <span class="menu-item-price">¥3,200</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Vitello Tonnato<em>ヴィテッロ・トンナート</em></p>
+          <p class="menu-item-desc">子牛肉のスライス、マグロのソース</p>
+        </div>
+        <span class="menu-item-price">¥4,200</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Gamberi Rossi<em>赤海老のマリネ</em></p>
+          <p class="menu-item-desc">シチリア産、柑橘のジェレ</p>
+        </div>
+        <span class="menu-item-price">¥5,800</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Tartare di Manzo<em>和牛タルタル</em></p>
+          <p class="menu-item-desc">黒トリュフ、卵黄のコンフィ</p>
+        </div>
+        <span class="menu-item-price">¥6,500</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Insalata di Stagione<em>季節の前菜</em></p>
+          <p class="menu-item-desc">シェフのセレクション</p>
+        </div>
+        <span class="menu-item-price">¥3,600</span>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="tab-pasta">
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Tagliolini al Tartufo Bianco<em>白トリュフのタリオリーニ</em></p>
+          <p class="menu-item-desc">バター、パルミジャーノ・レッジャーノ（季節限定）</p>
+        </div>
+        <span class="menu-item-price">¥8,800</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Pappardelle al Cinghiale<em>猪肉のパッパルデッレ</em></p>
+          <p class="menu-item-desc">トスカーナ産猪、赤ワインのラグー</p>
+        </div>
+        <span class="menu-item-price">¥4,800</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Risotto ai Funghi Porcini<em>ポルチーニのリゾット</em></p>
+          <p class="menu-item-desc">カルナローリ種、マスカルポーネ</p>
+        </div>
+        <span class="menu-item-price">¥4,200</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Spaghetti alle Vongole<em>ボンゴレ・ビアンコ</em></p>
+          <p class="menu-item-desc">地蛤、白ワイン、エキストラヴァージン</p>
+        </div>
+        <span class="menu-item-price">¥3,800</span>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="tab-secondi">
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Filetto di Manzo Wagyu<em>和牛フィレのロースト</em></p>
+          <p class="menu-item-desc">赤ワインとバルサミコのソース</p>
+        </div>
+        <span class="menu-item-price">¥12,800</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Branzino in Crosta di Sale<em>スズキの岩塩包み焼き</em></p>
+          <p class="menu-item-desc">天然スズキ、地中海ハーブ</p>
+        </div>
+        <span class="menu-item-price">¥6,800</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Agnello alla Brace<em>仔羊のグリル</em></p>
+          <p class="menu-item-desc">サルサヴェルデ、サルデーニャ産</p>
+        </div>
+        <span class="menu-item-price">¥7,800</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Petto d'Anatra<em>鴨胸肉のロースト</em></p>
+          <p class="menu-item-desc">無花果のコンポート、赤ポルト酒</p>
+        </div>
+        <span class="menu-item-price">¥6,200</span>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="tab-dolci">
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Tiramisù della Casa<em>ティラミス（自家製）</em></p>
+          <p class="menu-item-desc">マスカルポーネ、エスプレッソ</p>
+        </div>
+        <span class="menu-item-price">¥1,800</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Panna Cotta al Cioccolato<em>チョコレートのパンナコッタ</em></p>
+          <p class="menu-item-desc">ヴァローナ、フルーツクーリ</p>
+        </div>
+        <span class="menu-item-price">¥1,600</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Gelato Artigianale<em>自家製ジェラート</em></p>
+          <p class="menu-item-desc">本日の3種類、シェフセレクション</p>
+        </div>
+        <span class="menu-item-price">¥1,400</span>
+      </div>
+      <div class="menu-item">
+        <div class="menu-item-info">
+          <p class="menu-item-name">Cannolo Siciliano<em>シチリア風カンノーロ</em></p>
+          <p class="menu-item-desc">リコッタ、ピスタチオ</p>
+        </div>
+        <span class="menu-item-price">¥1,500</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wine -->
+  <div class="wine-section reveal">
+    <div class="wine-inner">
+      <div class="wine-heading">
+        <span class="section-label">Vini Selezionati</span>
+        <h3>イタリア直輸入<em>厳選ワイン</em></h3>
+        <p>産地の土壌と気候を映す、<br>真摯な造り手たちのボトルのみを。</p>
+      </div>
+      <div class="wine-list">
+        <div class="wine-item">
+          <span class="wine-region">Piemonte</span>
+          <span class="wine-name">Barolo Riserva 2018</span>
+          <span class="wine-note">Giacomo Conterno / 濃密なタンニン、黒果実</span>
+        </div>
+        <div class="wine-item">
+          <span class="wine-region">Toscana</span>
+          <span class="wine-name">Sassicaia 2019</span>
+          <span class="wine-note">Tenuta San Guido / エレガントなキャンティ</span>
+        </div>
+        <div class="wine-item">
+          <span class="wine-region">Veneto</span>
+          <span class="wine-name">Amarone 2017</span>
+          <span class="wine-note">Dal Forno Romano / 豊かな余韻と果実</span>
+        </div>
+        <div class="wine-item">
+          <span class="wine-region">Sicilia</span>
+          <span class="wine-name">Etna Rosso 2020</span>
+          <span class="wine-note">Cornelissen / 火山土壌の清澄な酸</span>
+        </div>
+        <div class="wine-item">
+          <span class="wine-region">Friuli</span>
+          <span class="wine-name">Vintage Tunina 2021</span>
+          <span class="wine-note">Jermann / 複雑で芳醇な白</span>
+        </div>
+        <div class="wine-item">
+          <span class="wine-region">Lombardia</span>
+          <span class="wine-name">Franciacorta Millesimato</span>
+          <span class="wine-note">Bellavista / 繊細な泡と柑橘</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================
+     ACCESS / GALLERY
+========================= -->
+<section id="access">
+  <div class="section-header reveal">
+    <span class="section-label">Gallery &amp; Access</span>
+    <h2>店内と<em>アクセス</em></h2>
+  </div>
+
+  <div class="gallery-grid reveal">
+    <div class="gallery-item">
+      <div class="gallery-cell gc-1"></div>
+      <span class="gallery-label">Dining Room</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-cell gc-2"></div>
+      <span class="gallery-label">Signature Dish</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-cell gc-3"></div>
+      <span class="gallery-label">Wine Cellar</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-cell gc-4"></div>
+      <span class="gallery-label">Private Room</span>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-cell gc-5"></div>
+      <span class="gallery-label">Chef's Table</span>
+    </div>
+  </div>
+
+  <div class="access-info">
+    <div class="access-map reveal">
+      <div class="map-pin">
+        <span class="map-pin-label">Ristorante Nero</span>
+        <div class="map-pin-dot">
+          <div class="map-pin-ring"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="access-details reveal reveal-delay-2">
+      <span class="section-label">Store Information</span>
+      <h3>店舗情報</h3>
+      <div class="info-row">
+        <span class="info-row-label">Address</span>
+        <span class="info-row-value">東京都中央区銀座5丁目5-5<br>銀座ネロビル 4F</span>
+      </div>
+      <div class="info-row">
+        <span class="info-row-label">Hours</span>
+        <span class="info-row-value">
+          Lunch — 11:30〜14:00 L.O.<br>
+          Dinner — 18:00〜21:30 L.O.<br>
+          <small style="opacity:0.6;font-style:italic;">月曜定休</small>
+        </span>
+      </div>
+      <div class="info-row">
+        <span class="info-row-label">Tel</span>
+        <span class="info-row-value"><a href="tel:0312345678">03-1234-5678</a></span>
+      </div>
+      <div class="info-row">
+        <span class="info-row-label">Access</span>
+        <span class="info-row-value">東京メトロ銀座線「銀座」駅<br>A3出口より徒歩2分</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================
+     RESERVATION
+========================= -->
+<section id="reservation">
+  <div class="reservation-inner">
+    <div class="section-header reveal" style="text-align:left;margin-bottom:0;padding:0;">
+      <span class="section-label" style="text-align:left;">Reservation</span>
+      <h2 style="text-align:left;">ご予約<em> Reserve</em></h2>
+      <p style="text-align:left;max-width:100%;margin:1rem 0 0;">
+        特別な夜のために、テーブルをご用意いたします。<br>
+        ご要望はお気軽にご記入ください。
+      </p>
+    </div>
+
+    <form class="reservation-form reveal reveal-delay-1" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="name">お名前</label>
+          <input class="form-input" type="text" id="name" placeholder="山田 花子" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="tel">電話番号</label>
+          <input class="form-input" type="tel" id="tel" placeholder="090-0000-0000" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="date">ご希望日</label>
+          <input class="form-input" type="date" id="date" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="time">ご希望時間</label>
+          <select class="form-select" id="time" required>
+            <option value="" disabled selected>選択してください</option>
+            <optgroup label="Lunch">
+              <option>11:30</option>
+              <option>12:00</option>
+              <option>12:30</option>
+            </optgroup>
+            <optgroup label="Dinner">
+              <option>18:00</option>
+              <option>18:30</option>
+              <option>19:00</option>
+              <option>19:30</option>
+              <option>20:00</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="guests">人数</label>
+          <select class="form-select" id="guests" required>
+            <option value="" disabled selected>選択してください</option>
+            <option>1名</option>
+            <option>2名</option>
+            <option>3名</option>
+            <option>4名</option>
+            <option>5名〜（要相談）</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="occasion">ご利用シーン</label>
+          <select class="form-select" id="occasion">
+            <option value="" disabled selected>選択してください</option>
+            <option>記念日・誕生日</option>
+            <option>デート</option>
+            <option>接待・会食</option>
+            <option>ご家族のお食事</option>
+            <option>その他</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group full">
+          <label class="form-label" for="requests">ご要望・アレルギー等</label>
+          <textarea class="form-textarea" id="requests" placeholder="アレルギー情報やご要望をお書きください"></textarea>
+        </div>
+      </div>
+      <button type="submit" class="form-submit">Confirm Reservation</button>
+      <p class="form-note">
+        ご予約確認のご連絡を、24時間以内にお電話またはメールにてご連絡いたします。<br>
+        当日のご予約はお電話にて承ります。
+      </p>
+    </form>
+  </div>
+</section>
+
+<!-- ========================
+     FOOTER
+========================= -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="footer-logo">Ristorante Nero</span>
+        <span class="footer-tagline">La vera cucina italiana a Ginza.</span>
+        <div class="ornament" style="justify-content:flex-start;margin-top:1.5rem;margin-bottom:0;">
+          <div class="ornament-line" style="width:30px;"></div>
+          <div class="ornament-diamond-sm"></div>
+          <div class="ornament-diamond" style="width:4px;height:4px;"></div>
+          <div class="ornament-diamond-sm"></div>
+          <div class="ornament-line right" style="width:30px;"></div>
+        </div>
+      </div>
+      <nav class="footer-nav">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#concept">Concept</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#access">Access</a></li>
+          <li><a href="#reservation">Reservation</a></li>
+        </ul>
+      </nav>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <p>
+          〒104-0061<br>
+          東京都中央区銀座5丁目5-5<br>
+          銀座ネロビル 4F<br><br>
+          Tel: <a href="tel:0312345678" style="color:var(--gold);text-decoration:none;">03-1234-5678</a><br>
+          18:00 — 21:30 (Dinner)
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Ristorante Nero All Rights Reserved.</p>
+      <div class="footer-sns">
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">Tabelog</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ===========================
+  // CUSTOM CURSOR
+  // ===========================
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top  = mouseY + 'px';
+  });
+
+  function animRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    cursorRing.style.left = ringX + 'px';
+    cursorRing.style.top  = ringY + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  document.querySelectorAll('a, button, .menu-tab').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '14px';
+      cursor.style.height = '14px';
+      cursorRing.style.width = '50px';
+      cursorRing.style.height = '50px';
+      cursorRing.style.borderColor = 'rgba(201,168,76,0.7)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '8px';
+      cursor.style.height = '8px';
+      cursorRing.style.width = '36px';
+      cursorRing.style.height = '36px';
+      cursorRing.style.borderColor = 'rgba(201,168,76,0.5)';
+    });
+  });
+
+  // ===========================
+  // NAVIGATION SCROLL
+  // ===========================
+  const nav = document.getElementById('mainNav');
+  const floatingReserve = document.getElementById('floatingReserve');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      nav.classList.add('scrolled');
+      floatingReserve.classList.add('show');
+    } else {
+      nav.classList.remove('scrolled');
+      floatingReserve.classList.remove('show');
+    }
+  });
+
+  // ===========================
+  // SCROLL REVEAL
+  // ===========================
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // ===========================
+  // MENU TABS
+  // ===========================
+  const tabs = document.querySelectorAll('.menu-tab');
+  const panels = document.querySelectorAll('.menu-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tab-' + target).classList.add('active');
+    });
+  });
+
+  // ===========================
+  // FORM SUBMIT
+  // ===========================
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    btn.textContent = 'Reservation Received — ありがとうございます';
+    btn.style.background = 'var(--burgundy-mid)';
+    btn.style.color = 'var(--cream)';
+    btn.style.letterSpacing = '0.15em';
+    btn.disabled = true;
+  }
+
+  // ===========================
+  // PARALLAX HERO PLATE
+  // ===========================
+  const plate = document.querySelector('.hero-plate');
+  window.addEventListener('scroll', () => {
+    if (plate) {
+      const scrolled = window.scrollY;
+      plate.style.transform = `translateY(calc(-50% + ${scrolled * 0.15}px))`;
+    }
+  });
+</script>
+</body>
+</html>
