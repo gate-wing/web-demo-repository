@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GMA Coffee Roasters</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Cormorant Garamond (EN display) + Noto Serif JP (JP) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Noto+Serif+JP:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream:   '#FAF7F2',
+            beige:   '#F2EDE4',
+            sand:    '#E0D4C4',
+            latte:   '#C9B49A',
+            coffee:  '#8B6A58',
+            espresso:'#5D4037',
+            roast:   '#3B2A20',
+            dark:    '#221408',
+          },
+          fontFamily: {
+            en: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            jp: ['"Noto Serif JP"', 'Georgia', 'serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background-color: #FAF7F2;
+      color: #221408;
+      font-family: 'Noto Serif JP', Georgia, serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Grain overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ── Scroll fade-in ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.9s cubic-bezier(.22,1,.36,1), transform 0.9s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.d1 { transition-delay: 0.10s; }
+    .reveal.d2 { transition-delay: 0.20s; }
+    .reveal.d3 { transition-delay: 0.32s; }
+    .reveal.d4 { transition-delay: 0.44s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Nav link underline ── */
+    .nav-a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.14em;
+      color: #221408;
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 2px;
+    }
+    .nav-a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 0; height: 1px;
+      background: #5D4037;
+      transition: width 0.3s ease;
+    }
+    .nav-a:hover::after { width: 100%; }
+
+    /* ── Ornament divider ── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      justify-content: center;
+    }
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      max-width: 100px;
+    }
+    .ornament::before { background: linear-gradient(to right, transparent, #C9B49A); }
+    .ornament::after  { background: linear-gradient(to left,  transparent, #C9B49A); }
+
+    /* ── Product card hover ── */
+    .p-card {
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .p-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 22px 48px rgba(34,20,8,.11);
+    }
+    .p-card .p-img { transition: transform 0.7s ease; }
+    .p-card:hover .p-img { transform: scale(1.06); }
+
+    /* ── Btn primary ── */
+    .btn-dark {
+      display: inline-block;
+      padding: 0.7rem 2.4rem;
+      background: #5D4037;
+      color: #FAF7F2;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.83rem;
+      letter-spacing: 0.22em;
+      border-radius: 2px;
+      transition: background 0.25s, color 0.25s;
+      text-decoration: none;
+    }
+    .btn-dark:hover { background: #3B2A20; }
+
+    /* ── Btn outline ── */
+    .btn-outline {
+      display: inline-block;
+      padding: 0.68rem 2.4rem;
+      border: 1px solid #5D4037;
+      color: #5D4037;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.83rem;
+      letter-spacing: 0.22em;
+      border-radius: 2px;
+      transition: background 0.25s, color 0.25s;
+      text-decoration: none;
+    }
+    .btn-outline:hover { background: #5D4037; color: #FAF7F2; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #FAF7F2; }
+    ::-webkit-scrollbar-thumb { background: #C9B49A; border-radius: 2px; }
+
+    /* ── Hero parallax ── */
+    #hero-bg {
+      will-change: transform;
+      transition: none;
+    }
+
+    /* ── Mobile menu ── */
+    #mob-menu { display: none; }
+    #mob-menu.open { display: block; }
+  </style>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════ -->
+<nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+     style="background: rgba(250,247,242,0.94); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(224,212,196,0.6);">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="#" class="flex flex-col leading-none select-none" style="text-decoration:none;">
+      <span style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:500; letter-spacing:0.18em; color:#221408;">GMA</span>
+      <span style="font-family:'Noto Serif JP',serif; font-size:0.58rem; font-weight:300; letter-spacing:0.3em; color:#8B6A58; margin-top:1px;">COFFEE ROASTERS</span>
+    </a>
+
+    <!-- Desktop links -->
+    <div class="hidden md:flex items-center gap-9">
+      <a href="#menu"   class="nav-a">Menu</a>
+      <a href="#store"  class="nav-a">Online Store</a>
+      <a href="#about"  class="nav-a">About</a>
+      <a href="#access" class="nav-a">Access</a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button id="mob-btn" class="md:hidden flex flex-col gap-[5px] p-1" aria-label="Menu">
+      <span class="w-6 h-px bg-dark block"></span>
+      <span class="w-4 h-px bg-dark block"></span>
+      <span class="w-6 h-px bg-dark block"></span>
+    </button>
+  </div>
+
+  <!-- Mobile dropdown -->
+  <div id="mob-menu" style="background: rgba(250,247,242,0.97); border-top: 1px solid #E0D4C4;">
+    <div class="px-6 py-5 flex flex-col gap-5">
+      <a href="#menu"   class="nav-a">Menu</a>
+      <a href="#store"  class="nav-a">Online Store</a>
+      <a href="#about"  class="nav-a">About</a>
+      <a href="#access" class="nav-a">Access</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
+<section id="hero" class="relative min-h-screen flex items-center overflow-hidden">
+
+  <!-- Background image (parallax) -->
+  <div id="hero-bg" class="absolute inset-0">
+    <img
+      src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1600&q=80&auto=format&fit=crop"
+      alt="GMA Coffee Roasters interior"
+      class="w-full h-full object-cover object-center"
+      style="filter: brightness(0.82) saturate(0.88);"
+    >
+  </div>
+
+  <!-- Gradient overlay: warm cream left fade -->
+  <div class="absolute inset-0"
+       style="background: linear-gradient(100deg, rgba(250,247,242,0.96) 0%, rgba(250,247,242,0.75) 40%, rgba(250,247,242,0.15) 70%, transparent 100%);">
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-6xl mx-auto px-6 pt-28 pb-20 w-full">
+    <div class="max-w-[520px]">
+
+      <p class="reveal" style="font-family:'Cormorant Garamond',serif; font-size:0.78rem; letter-spacing:0.45em; color:#8B6A58; text-transform:uppercase; margin-bottom:1.6rem;">
+        Est. 2018 &nbsp;·&nbsp; Tokyo, Japan
+      </p>
+
+      <h1 class="reveal d1" style="font-family:'Noto Serif JP',serif; font-weight:200; font-size:clamp(2.4rem,5.5vw,3.8rem); line-height:1.55; letter-spacing:0.04em; color:#221408; margin-bottom:1.4rem;">
+        一杯の珈琲が、<br>
+        <em style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.18em; font-weight:300; color:#5D4037;">
+          時間を、変える。
+        </em>
+      </h1>
+
+      <p class="reveal d2" style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.9rem; line-height:2.1; letter-spacing:0.05em; color:#5D4037; margin-bottom:2.8rem;">
+        丁寧に選び、丁寧に焙煎した豆を。<br>
+        あなたの日常に、そっと届けたい。
+      </p>
+
+      <div class="reveal d3 flex flex-wrap gap-3">
+        <a href="#menu" class="btn-dark">MENU</a>
+        <a href="#store" class="btn-outline">ONLINE STORE</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 reveal d4">
+    <span style="font-family:'Cormorant Garamond',serif; font-size:0.68rem; letter-spacing:0.38em; color:#8B6A58; text-transform:uppercase;">Scroll</span>
+    <div style="width:1px; height:44px; background:linear-gradient(to bottom,#C9B49A,transparent); animation:pulse 2s ease-in-out infinite;"></div>
+  </div>
+</section>
+
+<style>
+@keyframes pulse {
+  0%,100% { opacity:0.4; }
+  50%      { opacity:1; }
+}
+</style>
+
+
+<!-- ═══════════════════════════════════════
+     CONCEPT / ABOUT
+═══════════════════════════════════════ -->
+<section id="about" class="py-28 px-6" style="background:#FAF7F2;">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="ornament mb-3 reveal">
+      <span style="font-family:'Cormorant Garamond',serif; font-size:0.76rem; letter-spacing:0.42em; color:#8B6A58; text-transform:uppercase;">Concept</span>
+    </div>
+    <p class="text-center reveal" style="font-family:'Noto Serif JP',serif; font-weight:200; font-size:clamp(1.35rem,2.8vw,1.75rem); letter-spacing:0.12em; color:#221408; margin-bottom:5rem;">
+      豆と向き合い、人と向き合う。
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+
+      <!-- Text -->
+      <div class="reveal">
+        <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.9rem; line-height:2.3; letter-spacing:0.05em; color:#5D4037; margin-bottom:1.3rem;">
+          GMA Coffee Roastersは、エチオピア、コスタリカ、インドネシアなど世界中の農園から厳選したスペシャルティコーヒーを、少量ずつ丁寧に焙煎しています。
+        </p>
+        <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.9rem; line-height:2.3; letter-spacing:0.05em; color:#5D4037; margin-bottom:1.3rem;">
+          私たちが大切にしているのは、豆本来の個性を引き出すこと。そして、その一杯があなたの日常に、ささやかな豊かさをもたらすこと。
+        </p>
+        <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.9rem; line-height:2.3; letter-spacing:0.05em; color:#5D4037;">
+          都会の中にある、静かな場所。どうぞ、ゆっくりと時間をお過ごしください。
+        </p>
+        <a href="#" class="inline-block mt-8"
+           style="font-family:'Cormorant Garamond',serif; font-size:0.86rem; letter-spacing:0.28em; color:#5D4037; border-bottom:1px solid #C9B49A; padding-bottom:2px; text-decoration:none; transition:color 0.2s;">
+          READ MORE &nbsp;→
+        </a>
+      </div>
+
+      <!-- Image mosaic -->
+      <div class="reveal d2">
+        <div class="grid grid-cols-2 gap-3">
+          <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=500&q=80&auto=format&fit=crop"
+               alt="Coffee beans" class="w-full aspect-square object-cover rounded-sm"
+               style="filter:saturate(0.82) brightness(0.96);">
+          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80&auto=format&fit=crop"
+               alt="Latte art" class="w-full aspect-square object-cover rounded-sm mt-7"
+               style="filter:saturate(0.82) brightness(0.96);">
+          <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=500&q=80&auto=format&fit=crop"
+               alt="Pour over" class="w-full aspect-square object-cover rounded-sm -mt-7"
+               style="filter:saturate(0.82) brightness(0.96);">
+          <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500&q=80&auto=format&fit=crop"
+               alt="Coffee cup" class="w-full aspect-square object-cover rounded-sm"
+               style="filter:saturate(0.82) brightness(0.96);">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     MENU BANNER (dark bar)
+═══════════════════════════════════════ -->
+<section id="menu" style="background:#3B2A20; padding:4.5rem 1.5rem;">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center mb-10">
+      <div class="reveal">
+        <p style="font-family:'Cormorant Garamond',serif; font-size:2.3rem; font-weight:300; letter-spacing:0.06em; color:#FAF7F2;">Espresso</p>
+        <p style="font-family:'Noto Serif JP',serif; font-size:0.75rem; font-weight:300; letter-spacing:0.2em; color:#8B6A58; margin-top:0.4rem;">¥ 480 〜</p>
+      </div>
+      <div class="reveal d1">
+        <p style="font-family:'Cormorant Garamond',serif; font-size:2.3rem; font-weight:300; letter-spacing:0.06em; color:#FAF7F2;">Drip Coffee</p>
+        <p style="font-family:'Noto Serif JP',serif; font-size:0.75rem; font-weight:300; letter-spacing:0.2em; color:#8B6A58; margin-top:0.4rem;">¥ 580 〜</p>
+      </div>
+      <div class="reveal d2">
+        <p style="font-family:'Cormorant Garamond',serif; font-size:2.3rem; font-weight:300; letter-spacing:0.06em; color:#FAF7F2;">Cold Brew</p>
+        <p style="font-family:'Noto Serif JP',serif; font-size:0.75rem; font-weight:300; letter-spacing:0.2em; color:#8B6A58; margin-top:0.4rem;">¥ 680 〜</p>
+      </div>
+    </div>
+
+    <div class="text-center reveal d3">
+      <a href="#" style="display:inline-block; padding:0.68rem 2.6rem; border:1px solid #8B6A58; color:#C9B49A; font-family:'Cormorant Garamond',serif; font-size:0.83rem; letter-spacing:0.24em; border-radius:2px; text-decoration:none; transition:all 0.25s;"
+         onmouseover="this.style.background='#5D4037';this.style.borderColor='#5D4037';"
+         onmouseout="this.style.background='transparent';this.style.borderColor='#8B6A58';">
+        FULL MENU
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     ONLINE STORE
+═══════════════════════════════════════ -->
+<section id="store" class="py-28 px-6" style="background:#F2EDE4;">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="ornament mb-3 reveal">
+      <span style="font-family:'Cormorant Garamond',serif; font-size:0.76rem; letter-spacing:0.42em; color:#8B6A58; text-transform:uppercase;">Online Store</span>
+    </div>
+    <p class="text-center reveal" style="font-family:'Noto Serif JP',serif; font-weight:200; font-size:clamp(1.35rem,2.8vw,1.75rem); letter-spacing:0.12em; color:#221408; margin-bottom:4.5rem;">
+      おすすめの商品
+    </p>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+      <!-- Card 1 -->
+      <div class="p-card bg-cream rounded-sm overflow-hidden reveal">
+        <div class="overflow-hidden" style="aspect-ratio:1/1;">
+          <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=500&q=80&auto=format&fit=crop"
+               alt="Ethiopia Yirgacheffe"
+               class="p-img w-full h-full object-cover"
+               style="filter:saturate(0.88);">
+        </div>
+        <div class="p-5">
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.68rem; letter-spacing:0.35em; color:#8B6A58; text-transform:uppercase;">Ethiopia</p>
+          <h3 style="font-family:'Noto Serif JP',serif; font-weight:400; font-size:0.98rem; letter-spacing:0.08em; color:#221408; margin:0.35rem 0 0.6rem;">イルガチェフェ</h3>
+          <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.75rem; color:#8B6A58; line-height:1.9; margin-bottom:1.1rem;">
+            ブルーベリーのような甘酸っぱさと<br>フローラルな余韻。
+          </p>
+          <div class="flex items-center justify-between">
+            <span style="font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:#5D4037; letter-spacing:0.05em;">¥ 1,800</span>
+            <button style="padding:0.3rem 0.9rem; border:1px solid #5D4037; color:#5D4037; font-family:'Cormorant Garamond',serif; font-size:0.78rem; letter-spacing:0.18em; border-radius:2px; cursor:pointer; background:transparent; transition:all 0.22s;"
+                    onmouseover="this.style.background='#5D4037';this.style.color='#FAF7F2';"
+                    onmouseout="this.style.background='transparent';this.style.color='#5D4037';">
+              ADD
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="p-card bg-cream rounded-sm overflow-hidden reveal d1">
+        <div class="overflow-hidden" style="aspect-ratio:1/1;">
+          <img src="https://images.unsplash.com/photo-1511537190424-bbbab87ac5eb?w=500&q=80&auto=format&fit=crop"
+               alt="Colombia Huila"
+               class="p-img w-full h-full object-cover"
+               style="filter:saturate(0.88);">
+        </div>
+        <div class="p-5">
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.68rem; letter-spacing:0.35em; color:#8B6A58; text-transform:uppercase;">Colombia</p>
+          <h3 style="font-family:'Noto Serif JP',serif; font-weight:400; font-size:0.98rem; letter-spacing:0.08em; color:#221408; margin:0.35rem 0 0.6rem;">ウイラ</h3>
+          <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.75rem; color:#8B6A58; line-height:1.9; margin-bottom:1.1rem;">
+            キャラメルのような甘みと<br>なめらかなコク。
+          </p>
+          <div class="flex items-center justify-between">
+            <span style="font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:#5D4037; letter-spacing:0.05em;">¥ 1,650</span>
+            <button style="padding:0.3rem 0.9rem; border:1px solid #5D4037; color:#5D4037; font-family:'Cormorant Garamond',serif; font-size:0.78rem; letter-spacing:0.18em; border-radius:2px; cursor:pointer; background:transparent; transition:all 0.22s;"
+                    onmouseover="this.style.background='#5D4037';this.style.color='#FAF7F2';"
+                    onmouseout="this.style.background='transparent';this.style.color='#5D4037';">
+              ADD
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="p-card bg-cream rounded-sm overflow-hidden reveal d2">
+        <div class="overflow-hidden" style="aspect-ratio:1/1;">
+          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&q=80&auto=format&fit=crop"
+               alt="Scones"
+               class="p-img w-full h-full object-cover"
+               style="filter:saturate(0.88);">
+        </div>
+        <div class="p-5">
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.68rem; letter-spacing:0.35em; color:#8B6A58; text-transform:uppercase;">Baked Goods</p>
+          <h3 style="font-family:'Noto Serif JP',serif; font-weight:400; font-size:0.98rem; letter-spacing:0.08em; color:#221408; margin:0.35rem 0 0.6rem;">プレーンスコーン</h3>
+          <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.75rem; color:#8B6A58; line-height:1.9; margin-bottom:1.1rem;">
+            バターの芳醇な香りが漂う<br>毎朝焼きたての一品。
+          </p>
+          <div class="flex items-center justify-between">
+            <span style="font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:#5D4037; letter-spacing:0.05em;">¥ 380</span>
+            <button style="padding:0.3rem 0.9rem; border:1px solid #5D4037; color:#5D4037; font-family:'Cormorant Garamond',serif; font-size:0.78rem; letter-spacing:0.18em; border-radius:2px; cursor:pointer; background:transparent; transition:all 0.22s;"
+                    onmouseover="this.style.background='#5D4037';this.style.color='#FAF7F2';"
+                    onmouseout="this.style.background='transparent';this.style.color='#5D4037';">
+              ADD
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="p-card bg-cream rounded-sm overflow-hidden reveal d3">
+        <div class="overflow-hidden" style="aspect-ratio:1/1;">
+          <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&q=80&auto=format&fit=crop"
+               alt="GMA Original Blend"
+               class="p-img w-full h-full object-cover"
+               style="filter:saturate(0.88);">
+        </div>
+        <div class="p-5">
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.68rem; letter-spacing:0.35em; color:#8B6A58; text-transform:uppercase;">Original Blend</p>
+          <h3 style="font-family:'Noto Serif JP',serif; font-weight:400; font-size:0.98rem; letter-spacing:0.08em; color:#221408; margin:0.35rem 0 0.6rem;">GMAブレンド</h3>
+          <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.75rem; color:#8B6A58; line-height:1.9; margin-bottom:1.1rem;">
+            毎日飲んでも飽きない、<br>私たちが愛するブレンド。
+          </p>
+          <div class="flex items-center justify-between">
+            <span style="font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:#5D4037; letter-spacing:0.05em;">¥ 1,500</span>
+            <button style="padding:0.3rem 0.9rem; border:1px solid #5D4037; color:#5D4037; font-family:'Cormorant Garamond',serif; font-size:0.78rem; letter-spacing:0.18em; border-radius:2px; cursor:pointer; background:transparent; transition:all 0.22s;"
+                    onmouseover="this.style.background='#5D4037';this.style.color='#FAF7F2';"
+                    onmouseout="this.style.background='transparent';this.style.color='#5D4037';">
+              ADD
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /grid -->
+
+    <div class="text-center mt-12 reveal">
+      <a href="#" class="btn-outline">VIEW ALL PRODUCTS</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     NEWS
+═══════════════════════════════════════ -->
+<section id="news" class="py-28 px-6" style="background:#FAF7F2;">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="ornament mb-3 reveal">
+      <span style="font-family:'Cormorant Garamond',serif; font-size:0.76rem; letter-spacing:0.42em; color:#8B6A58; text-transform:uppercase;">News</span>
+    </div>
+    <p class="text-center reveal" style="font-family:'Noto Serif JP',serif; font-weight:200; font-size:clamp(1.35rem,2.8vw,1.75rem); letter-spacing:0.12em; color:#221408; margin-bottom:4.5rem;">
+      お知らせ
+    </p>
+
+    <div class="max-w-3xl mx-auto">
+
+      <!-- News 1 -->
+      <article class="reveal border-t border-sand py-7 flex gap-8 rounded-sm -mx-3 px-3 hover:bg-beige transition-colors duration-200 cursor-pointer">
+        <div class="shrink-0" style="min-width:82px;">
+          <span style="font-family:'Cormorant Garamond',serif; font-size:0.78rem; letter-spacing:0.15em; color:#8B6A58; display:block;">2025.06</span>
+          <span style="font-family:'Cormorant Garamond',serif; font-size:0.65rem; letter-spacing:0.2em; color:#C9B49A; display:block; margin-top:3px; text-transform:uppercase;">New Menu</span>
+        </div>
+        <div>
+          <h3 style="font-family:'Noto Serif JP',serif; font-weight:400; font-size:0.94rem; letter-spacing:0.06em; color:#221408; margin-bottom:0.5rem;">
+            夏季限定「コールドブリュートニック」登場
+          </h3>
+          <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.82rem; color:#8B6A58; line-height:1.95;">
+            今年の夏も、清涼感あふれる限定メニューをご用意しました。シトラス系のコーヒーとトニックウォーターの絶妙な組み合わせをお楽しみください。
+          </p>
+        </div>
+      </article>
+
+      <!-- News 2 -->
+      <article class="reveal d1 border-t border-sand py-7 flex gap-8 rounded-sm -mx-3 px-3 hover:bg-beige transition-colors duration-200 cursor-pointer">
+        <div class="shrink-0" style="min-width:82px;">
+          <span style="font-family:'Cormorant Garamond',serif; font-size:0.78rem; letter-spacing:0.15em; color:#8B6A58; display:block;">2025.05</span>
+          <span style="font-family:'Cormorant Garamond',serif; font-size:0.65rem; letter-spacing:0.2em; color:#C9B49A; display:block; margin-top:3px; text-transform:uppercase;">Event</span>
+        </div>
+        <div>
+          <h3 style="font-family:'Noto Serif JP',serif; font-weight:400; font-size:0.94rem; letter-spacing:0.06em; color:#221408; margin-bottom:0.5rem;">
+            コーヒーワークショップ「焙煎の科学」開催
+          </h3>
+          <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.82rem; color:#8B6A58; line-height:1.95;">
+            5月25日（土）14:00〜、焙煎士によるスペシャルワークショップを開催いたします。定員12名。ご予約はInstagram DMまたはお電話にて。
+          </p>
+        </div>
+      </article>
+
+      <!-- News 3 -->
+      <article class="reveal d2 border-t border-sand py-7 flex gap-8 rounded-sm -mx-3 px-3 hover:bg-beige transition-colors duration-200 cursor-pointer">
+        <div class="shrink-0" style="min-width:82px;">
+          <span style="font-family:'Cormorant Garamond',serif; font-size:0.78rem; letter-spacing:0.15em; color:#8B6A58; display:block;">2025.04</span>
+          <span style="font-family:'Cormorant Garamond',serif; font-size:0.65rem; letter-spacing:0.2em; color:#C9B49A; display:block; margin-top:3px; text-transform:uppercase;">Info</span>
+        </div>
+        <div>
+          <h3 style="font-family:'Noto Serif JP',serif; font-weight:400; font-size:0.94rem; letter-spacing:0.06em; color:#221408; margin-bottom:0.5rem;">
+            新豆入荷：コスタリカ タラス産 ゲイシャ
+          </h3>
+          <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.82rem; color:#8B6A58; line-height:1.95;">
+            コスタリカのタラス地方から届いた希少なゲイシャ種。少量入荷のため、お早めにご来店ください。オンラインストアでも販売予定です。
+          </p>
+        </div>
+      </article>
+
+      <!-- Bottom border -->
+      <div class="border-t border-sand"></div>
+
+    </div>
+
+    <div class="text-center mt-10 reveal">
+      <a href="#"
+         style="font-family:'Cormorant Garamond',serif; font-size:0.86rem; letter-spacing:0.28em; color:#5D4037; border-bottom:1px solid #C9B49A; padding-bottom:2px; text-decoration:none;">
+        ALL NEWS &nbsp;→
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     ACCESS
+═══════════════════════════════════════ -->
+<section id="access" class="py-28 px-6" style="background:#F2EDE4;">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="ornament mb-3 reveal">
+      <span style="font-family:'Cormorant Garamond',serif; font-size:0.76rem; letter-spacing:0.42em; color:#8B6A58; text-transform:uppercase;">Access</span>
+    </div>
+    <p class="text-center reveal" style="font-family:'Noto Serif JP',serif; font-weight:200; font-size:clamp(1.35rem,2.8vw,1.75rem); letter-spacing:0.12em; color:#221408; margin-bottom:4.5rem;">
+      アクセス・店舗情報
+    </p>
+
+    <div class="grid md:grid-cols-2 gap-14 items-start">
+
+      <!-- Map placeholder -->
+      <div class="reveal">
+        <div class="w-full rounded-sm overflow-hidden flex items-center justify-center"
+             style="aspect-ratio:4/3; background:linear-gradient(135deg,#E8DDD0 0%,#D0BFA8 100%);">
+          <div class="text-center select-none">
+            <div class="w-11 h-11 mx-auto mb-3 rounded-full flex items-center justify-center" style="background:#5D4037;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <p style="font-family:'Cormorant Garamond',serif; font-size:0.82rem; letter-spacing:0.25em; color:#8B6A58; text-transform:uppercase;">Map Placeholder</p>
+            <p style="font-family:'Noto Serif JP',serif; font-size:0.72rem; font-weight:300; color:#A09080; margin-top:0.3rem; letter-spacing:0.05em;">東京都渋谷区神山町10-1</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Store info -->
+      <div class="reveal d1 space-y-6">
+
+        <div>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.7rem; letter-spacing:0.38em; color:#8B6A58; text-transform:uppercase; margin-bottom:0.5rem;">Address</p>
+          <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.9rem; letter-spacing:0.06em; color:#221408; line-height:2;">
+            〒150-0047<br>
+            東京都渋谷区神山町10-1<br>
+            奥渋谷ビル 1F
+          </p>
+        </div>
+
+        <div style="width:2.5rem; height:1px; background:#E0D4C4;"></div>
+
+        <div>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.7rem; letter-spacing:0.38em; color:#8B6A58; text-transform:uppercase; margin-bottom:0.5rem;">Hours</p>
+          <div style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.88rem; color:#221408; line-height:2.1;">
+            <div style="display:flex; gap:2.5rem;">
+              <span style="color:#8B6A58; font-size:0.8rem; min-width:2.5rem;">平日</span>
+              <span>8:00 – 19:00</span>
+            </div>
+            <div style="display:flex; gap:2.5rem;">
+              <span style="color:#8B6A58; font-size:0.8rem; min-width:2.5rem;">土曜</span>
+              <span>9:00 – 20:00</span>
+            </div>
+            <div style="display:flex; gap:2.5rem;">
+              <span style="color:#8B6A58; font-size:0.8rem; min-width:2.5rem;">日・祝</span>
+              <span>10:00 – 18:00</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:2.5rem; height:1px; background:#E0D4C4;"></div>
+
+        <div>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.7rem; letter-spacing:0.38em; color:#8B6A58; text-transform:uppercase; margin-bottom:0.5rem;">Access</p>
+          <p style="font-family:'Noto Serif JP',serif; font-weight:300; font-size:0.88rem; letter-spacing:0.06em; color:#221408; line-height:2;">
+            渋谷駅 西口より徒歩12分<br>
+            代々木公園駅 1番出口より徒歩5分
+          </p>
+        </div>
+
+        <div style="width:2.5rem; height:1px; background:#E0D4C4;"></div>
+
+        <div>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:0.7rem; letter-spacing:0.38em; color:#8B6A58; text-transform:uppercase; margin-bottom:0.5rem;">Tel</p>
+          <p style="font-family:'Cormorant Garamond',serif; font-size:1.25rem; letter-spacing:0.12em; color:#221408;">03-XXXX-XXXX</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
+<footer style="background:#221408; padding:3.5rem 1.5rem;">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+
+      <!-- Logo -->
+      <div class="text-center md:text-left">
+        <p style="font-family:'Cormorant Garamond',serif; font-size:1.65rem; font-weight:300; letter-spacing:0.22em; color:#FAF7F2;">GMA</p>
+        <p style="font-family:'Noto Serif JP',serif; font-size:0.6rem; font-weight:300; letter-spacing:0.32em; color:#5D4037; margin-top:2px;">COFFEE ROASTERS</p>
+      </div>
+
+      <!-- Nav links -->
+      <nav class="flex flex-wrap justify-center gap-6">
+        <a href="#menu"   style="font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.22em; color:#5D4037; text-decoration:none; transition:color 0.2s;"
+           onmouseover="this.style.color='#C9B49A';" onmouseout="this.style.color='#5D4037';">Menu</a>
+        <a href="#store"  style="font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.22em; color:#5D4037; text-decoration:none; transition:color 0.2s;"
+           onmouseover="this.style.color='#C9B49A';" onmouseout="this.style.color='#5D4037';">Online Store</a>
+        <a href="#about"  style="font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.22em; color:#5D4037; text-decoration:none; transition:color 0.2s;"
+           onmouseover="this.style.color='#C9B49A';" onmouseout="this.style.color='#5D4037';">About</a>
+        <a href="#access" style="font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.22em; color:#5D4037; text-decoration:none; transition:color 0.2s;"
+           onmouseover="this.style.color='#C9B49A';" onmouseout="this.style.color='#5D4037';">Access</a>
+      </nav>
+
+      <!-- SNS icons -->
+      <div class="flex gap-3">
+        <!-- Instagram -->
+        <a href="#" aria-label="Instagram"
+           style="width:36px;height:36px;border:1px solid #3B2A20;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:border-color 0.2s,background 0.2s;"
+           onmouseover="this.style.borderColor='#5D4037';this.style.background='#3B2A20';"
+           onmouseout="this.style.borderColor='#3B2A20';this.style.background='transparent';">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8B6A58" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+        </a>
+        <!-- X (Twitter) -->
+        <a href="#" aria-label="X"
+           style="width:36px;height:36px;border:1px solid #3B2A20;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:border-color 0.2s,background 0.2s;"
+           onmouseover="this.style.borderColor='#5D4037';this.style.background='#3B2A20';"
+           onmouseout="this.style.borderColor='#3B2A20';this.style.background='transparent';">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="#8B6A58">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.736-8.856L1.813 2.25H8.49l4.273 5.649 5.48-5.649zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        <!-- Facebook -->
+        <a href="#" aria-label="Facebook"
+           style="width:36px;height:36px;border:1px solid #3B2A20;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:border-color 0.2s,background 0.2s;"
+           onmouseover="this.style.borderColor='#5D4037';this.style.background='#3B2A20';"
+           onmouseout="this.style.borderColor='#3B2A20';this.style.background='transparent';">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8B6A58" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+        </a>
+      </div>
+
+    </div><!-- /flex row -->
+
+    <div style="height:1px; background:#2E1C10; margin:2.5rem 0 1.8rem;"></div>
+
+    <p class="text-center" style="font-family:'Cormorant Garamond',serif; font-size:0.72rem; letter-spacing:0.22em; color:#3B2A20;">
+      © 2025 GMA Coffee Roasters. All Rights Reserved.
+    </p>
+
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════ -->
+<script>
+  /* ── Scroll reveal ── */
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => io.observe(el));
+
+  /* ── Mobile menu ── */
+  const mobBtn  = document.getElementById('mob-btn');
+  const mobMenu = document.getElementById('mob-menu');
+  mobBtn.addEventListener('click', () => mobMenu.classList.toggle('open'));
+  mobMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobMenu.classList.remove('open')));
+
+  /* ── Nav shadow on scroll ── */
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.style.boxShadow = window.scrollY > 40 ? '0 2px 24px rgba(34,20,8,.07)' : 'none';
+  }, { passive: true });
+
+  /* ── Subtle hero parallax ── */
+  const heroBg = document.getElementById('hero-bg');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y < window.innerHeight) {
+      heroBg.style.transform = `translateY(${y * 0.28}px)`;
+    }
+  }, { passive: true });
+</script>
+
+</body>
+</html>
