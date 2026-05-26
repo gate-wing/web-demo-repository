@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUREA TEA: Salon & Boutique</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── CSS Custom Properties ─────────────────────────────────────────── */
+    :root {
+      --beige-light:  #FAF9F6;
+      --beige-base:   #F5F5DC;
+      --tea-green:    #1B3022;
+      --tea-green-mid:#2d5040;
+      --tea-gold:     #D4AF37;
+      --tea-gold-dark:#B8941F;
+      --text-mid:     #4a4740;
+      --text-light:   #9a9690;
+      --transition:   0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* ─── Reset & Base ──────────────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background-color: var(--beige-light);
+      color: var(--text-mid);
+      font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    ul { list-style: none; }
+
+    /* ─── Utility ───────────────────────────────────────────────────────── */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 3rem;
+    }
+    .section-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--tea-gold);
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: var(--tea-green);
+    }
+    .gold-rule {
+      display: block;
+      width: 48px;
+      height: 1px;
+      background: var(--tea-gold);
+      margin: 1.25rem auto 0;
+    }
+    .section-intro { text-align: center; margin-bottom: 4.5rem; }
+
+    /* ─── Scroll Animation ──────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.22s; }
+    .reveal-d3 { transition-delay: 0.34s; }
+    .reveal-d4 { transition-delay: 0.46s; }
+
+    /* ─── Mobile Menu ───────────────────────────────────────────────────── */
+    .mobile-menu {
+      position: fixed; inset: 0;
+      background-color: var(--tea-green);
+      z-index: 9998;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+    }
+    .mobile-menu.open { opacity: 1; pointer-events: auto; }
+    .mobile-menu__close {
+      position: absolute; top: 1.5rem; right: 1.75rem;
+      background: none; border: none; cursor: pointer;
+      color: var(--beige-light);
+    }
+    .mobile-menu__link {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      color: var(--beige-light);
+      transition: color 0.3s ease;
+    }
+    .mobile-menu__link:hover { color: var(--tea-gold); }
+    .mobile-menu__divider {
+      width: 40px; height: 1px;
+      background: rgba(212,175,55,0.4);
+    }
+
+    /* ─── Header ────────────────────────────────────────────────────────── */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 1.75rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background var(--transition), padding var(--transition), box-shadow var(--transition);
+    }
+    .site-header.scrolled {
+      background: rgba(250, 249, 246, 0.96);
+      backdrop-filter: blur(8px);
+      padding: 1.1rem 3rem;
+      box-shadow: 0 1px 20px rgba(27,48,34,0.07);
+    }
+    .site-header__logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      color: rgba(250,249,246,0.95);
+      transition: color var(--transition);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .site-header__logo em { color: var(--tea-gold); font-style: normal; }
+    .site-header.scrolled .site-header__logo { color: var(--tea-green); }
+
+    .nav { display: flex; gap: 2.25rem; align-items: center; }
+    .nav__link {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(250,249,246,0.8);
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .nav__link::after {
+      content: '';
+      position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--tea-gold);
+      transition: width 0.3s ease;
+    }
+    .nav__link:hover { color: var(--tea-gold); }
+    .nav__link:hover::after { width: 100%; }
+    .site-header.scrolled .nav__link { color: var(--tea-green); }
+    .site-header.scrolled .nav__link:hover { color: var(--tea-gold); }
+
+    .header__hamburger {
+      display: none;
+      background: none; border: none; cursor: pointer;
+      padding: 4px;
+      color: rgba(250,249,246,0.9);
+      transition: color var(--transition);
+    }
+    .site-header.scrolled .header__hamburger { color: var(--tea-green); }
+
+    /* ─── Hero ──────────────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      height: 100svh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero__bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1544787210-2211d44b565a?auto=format&fit=crop&q=80&w=1600');
+      background-size: cover;
+      background-position: center 30%;
+      will-change: transform;
+    }
+    .hero__overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        160deg,
+        rgba(27,48,34,0.25) 0%,
+        rgba(27,48,34,0.55) 55%,
+        rgba(15,25,18,0.72) 100%
+      );
+    }
+    .hero__noise {
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .hero__content {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 2rem;
+    }
+    .hero__eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--tea-gold);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: heroFade 1s ease 0.4s forwards;
+    }
+    .hero__title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 400;
+      color: var(--beige-light);
+      line-height: 1.35;
+      margin-bottom: 1.75rem;
+      opacity: 0;
+      animation: heroFade 1s ease 0.75s forwards;
+    }
+    .hero__subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: rgba(250,249,246,0.75);
+      margin-bottom: 3rem;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      animation: heroFade 1s ease 1.05s forwards;
+    }
+    .hero__cta {
+      display: inline-block;
+      padding: 0.85rem 2.75rem;
+      border: 1px solid rgba(212,175,55,0.7);
+      color: var(--tea-gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+      opacity: 0;
+      animation: heroFade 1s ease 1.35s forwards;
+    }
+    .hero__cta:hover {
+      background: var(--tea-gold);
+      color: var(--tea-green);
+      border-color: var(--tea-gold);
+    }
+    .hero__scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      color: rgba(250,249,246,0.55);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      animation: scrollBounce 2.5s ease infinite 2s;
+    }
+    .hero__scroll-line {
+      width: 1px; height: 44px;
+      background: linear-gradient(to bottom, rgba(250,249,246,0.6), transparent);
+    }
+
+    @keyframes heroFade {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(9px); }
+    }
+
+    /* ─── News ──────────────────────────────────────────────────────────── */
+    .news {
+      background-color: var(--tea-green);
+      padding: 4.5rem 0;
+    }
+    .news__label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--tea-gold);
+      display: flex; align-items: center; gap: 1.25rem;
+      margin-bottom: 2.25rem;
+    }
+    .news__label::after {
+      content: ''; flex: 1; height: 1px;
+      background: rgba(212,175,55,0.25);
+    }
+    .news__list { display: flex; flex-direction: column; gap: 0; }
+    .news__item {
+      display: flex;
+      align-items: baseline;
+      gap: 1.75rem;
+      padding: 1.35rem 0;
+      border-bottom: 1px solid rgba(250,249,246,0.07);
+      transition: padding-left var(--transition);
+    }
+    .news__item:last-child { border-bottom: none; }
+    .news__item:hover { padding-left: 0.5rem; }
+    .news__date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: var(--tea-gold);
+      white-space: nowrap;
+      min-width: 92px;
+    }
+    .news__tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--tea-green);
+      background: var(--tea-gold);
+      padding: 0.18rem 0.7rem;
+      white-space: nowrap;
+      line-height: 1.8;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .news__text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: rgba(250,249,246,0.82);
+      letter-spacing: 0.02em;
+    }
+
+    /* ─── Portal ────────────────────────────────────────────────────────── */
+    .portal { padding: 7rem 0; background-color: var(--beige-light); }
+    .portal__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+    .portal__card {
+      position: relative;
+      padding: 3.25rem 2rem 2.75rem;
+      text-align: center;
+      border: 1px solid rgba(27,48,34,0.12);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .portal__card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--tea-green);
+      transform: translateY(100%);
+      transition: transform var(--transition);
+      z-index: 0;
+    }
+    .portal__card:hover {
+      border-color: var(--tea-green);
+      box-shadow: 0 12px 48px rgba(27,48,34,0.18);
+    }
+    .portal__card:hover::before { transform: translateY(0); }
+    .portal__card-body {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 1.35rem;
+    }
+    .portal__icon {
+      width: 44px; height: 44px;
+      color: var(--tea-gold);
+      transition: transform 0.35s ease;
+    }
+    .portal__card:hover .portal__icon { transform: scale(1.12); }
+    .portal__sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--tea-gold);
+    }
+    .portal__title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      color: var(--tea-green);
+      transition: color var(--transition);
+    }
+    .portal__card:hover .portal__title { color: var(--beige-light); }
+    .portal__desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      line-height: 1.65;
+      transition: color var(--transition);
+    }
+    .portal__card:hover .portal__desc { color: rgba(250,249,246,0.68); }
+    .portal__arrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--tea-gold);
+      transition: letter-spacing var(--transition);
+    }
+    .portal__card:hover .portal__arrow { letter-spacing: 0.32em; }
+
+    /* ─── Products ──────────────────────────────────────────────────────── */
+    .products { padding: 7rem 0; background-color: var(--beige-base); }
+    .products__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+    }
+    .product-card {
+      background: var(--beige-light);
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 56px rgba(27,48,34,0.13);
+    }
+    .product-card__media {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+    .product-card__media img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.65s ease;
+    }
+    .product-card:hover .product-card__media img { transform: scale(1.07); }
+    .product-card__badge {
+      position: absolute; top: 1rem; left: 1rem;
+      background: var(--tea-gold);
+      color: var(--tea-green);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.8rem;
+    }
+    .product-card__body { padding: 1.75rem; }
+    .product-card__origin {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--tea-gold);
+      font-family: 'Cormorant Garamond', serif;
+      margin-bottom: 0.5rem;
+    }
+    .product-card__name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--tea-green);
+      margin-bottom: 0.85rem;
+      line-height: 1.35;
+    }
+    .product-card__desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+    }
+    .product-card__footer {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid rgba(27,48,34,0.08);
+      padding-top: 1.25rem;
+    }
+    .product-card__price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--tea-green);
+    }
+    .product-card__price small {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+    .btn-outline {
+      display: inline-block;
+      padding: 0.55rem 1.35rem;
+      border: 1px solid var(--tea-gold);
+      color: var(--tea-gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: background var(--transition), color var(--transition);
+      cursor: pointer;
+    }
+    .btn-outline:hover {
+      background: var(--tea-gold);
+      color: var(--tea-green);
+    }
+
+    /* ─── Instagram ─────────────────────────────────────────────────────── */
+    .instagram { padding: 7rem 0; background: var(--beige-light); }
+    .instagram__handle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: var(--tea-gold);
+      letter-spacing: 0.1em;
+      margin-top: 0.4rem;
+    }
+    .instagram__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+    }
+    .insta-item {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .insta-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.55s ease;
+    }
+    .insta-item:hover img { transform: scale(1.09); }
+    .insta-item__overlay {
+      position: absolute; inset: 0;
+      background: rgba(27,48,34,0.55);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .insta-item:hover .insta-item__overlay { opacity: 1; }
+    .insta-item__icon {
+      width: 30px; height: 30px;
+      color: var(--beige-light);
+    }
+
+    /* ─── Footer ────────────────────────────────────────────────────────── */
+    .site-footer {
+      background: var(--tea-green);
+      color: var(--beige-light);
+      padding: 5.5rem 0 2.5rem;
+    }
+    .footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.6fr;
+      gap: 4rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid rgba(250,249,246,0.1);
+    }
+    .footer__logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.85rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.85rem;
+      color: var(--beige-light);
+    }
+    .footer__logo em { color: var(--tea-gold); font-style: normal; }
+    .footer__tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.98rem;
+      font-style: italic;
+      color: rgba(250,249,246,0.5);
+      margin-bottom: 1.75rem;
+    }
+    .footer__hours-badge {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.5rem 1.1rem;
+      border: 1px solid rgba(212,175,55,0.5);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.83rem;
+      color: var(--tea-gold);
+      letter-spacing: 0.08em;
+      margin-bottom: 1.75rem;
+    }
+    .pulse-dot {
+      width: 6px; height: 6px;
+      background: var(--tea-gold);
+      border-radius: 50%;
+      animation: pulseDot 2s ease infinite;
+    }
+    @keyframes pulseDot {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.3; }
+    }
+    .footer__socials { display: flex; gap: 0.75rem; }
+    .footer__social-btn {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(250,249,246,0.2);
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.3s ease, background 0.3s ease;
+      cursor: pointer;
+    }
+    .footer__social-btn:hover {
+      border-color: var(--tea-gold);
+      background: rgba(212,175,55,0.08);
+    }
+    .footer__social-btn svg {
+      width: 15px; height: 15px;
+      color: rgba(250,249,246,0.65);
+      transition: color 0.3s ease;
+    }
+    .footer__social-btn:hover svg { color: var(--tea-gold); }
+
+    .footer__col-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--tea-gold);
+      margin-bottom: 1.5rem;
+    }
+    .footer__nav { display: flex; flex-direction: column; gap: 0.8rem; }
+    .footer__nav a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.93rem;
+      color: rgba(250,249,246,0.65);
+      transition: color 0.3s ease;
+    }
+    .footer__nav a:hover { color: var(--tea-gold); }
+
+    .footer__address {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+      color: rgba(250,249,246,0.62);
+      line-height: 2;
+      margin-bottom: 0.25rem;
+    }
+    .footer__newsletter-note {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.83rem;
+      color: rgba(250,249,246,0.5);
+      margin-bottom: 0.85rem;
+      margin-top: 2rem;
+    }
+    .footer__form { display: flex; }
+    .footer__input {
+      flex: 1;
+      padding: 0.7rem 1rem;
+      background: rgba(250,249,246,0.06);
+      border: 1px solid rgba(250,249,246,0.18);
+      border-right: none;
+      color: var(--beige-light);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+    .footer__input::placeholder { color: rgba(250,249,246,0.35); }
+    .footer__input:focus { border-color: var(--tea-gold); }
+    .footer__submit {
+      padding: 0.7rem 1.15rem;
+      background: var(--tea-gold);
+      border: 1px solid var(--tea-gold);
+      color: var(--tea-green);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      white-space: nowrap;
+    }
+    .footer__submit:hover { background: var(--tea-gold-dark); }
+
+    .footer__bottom {
+      padding-top: 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer__copy {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem;
+      color: rgba(250,249,246,0.3);
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── Responsive ────────────────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .container { padding: 0 2rem; }
+      .portal__grid { grid-template-columns: repeat(2, 1fr); }
+      .products__grid { grid-template-columns: repeat(2, 1fr); }
+      .footer__top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 1.5rem; }
+      .site-header { padding: 1.25rem 1.5rem; }
+      .site-header.scrolled { padding: 1rem 1.5rem; }
+      .nav { display: none; }
+      .header__hamburger { display: block; }
+      .site-header__logo { position: static; transform: none; }
+      .hero__title { font-size: 2.6rem; }
+      .news { padding: 3.5rem 0; }
+      .portal  { padding: 5rem 0; }
+      .products { padding: 5rem 0; }
+      .instagram { padding: 5rem 0; }
+      .portal__grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .portal__card { padding: 2.25rem 1.25rem 2rem; }
+      .products__grid { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
+      .instagram__grid { grid-template-columns: repeat(2, 1fr); }
+      .footer__top { grid-template-columns: 1fr; gap: 2.25rem; }
+      .footer__bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
+      .site-footer { padding: 4rem 0 2rem; }
+    }
+    @media (max-width: 480px) {
+      .hero__title { font-size: 2.1rem; }
+      .portal__grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; }
+      .portal__card { padding: 1.85rem 1rem 1.6rem; }
+      .news__item { flex-wrap: wrap; gap: 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════ MOBILE MENU -->
+  <nav class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+    <button class="mobile-menu__close" id="mobileMenuClose" aria-label="Close menu">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <a class="mobile-menu__link" href="#portal"    data-close>Salon</a>
+    <div class="mobile-menu__divider"></div>
+    <a class="mobile-menu__link" href="#portal"    data-close>Shop</a>
+    <div class="mobile-menu__divider"></div>
+    <a class="mobile-menu__link" href="#instagram" data-close>Our Story</a>
+    <div class="mobile-menu__divider"></div>
+    <a class="mobile-menu__link" href="#footer"    data-close>Access</a>
+  </nav>
+
+  <!-- ══════════════════════════════════════════════════════ HEADER -->
+  <header class="site-header" id="siteHeader">
+    <!-- Left nav -->
+    <nav class="nav" aria-label="Left navigation">
+      <a class="nav__link" href="#portal">Menu</a>
+      <a class="nav__link" href="#products">Shop</a>
+    </nav>
+
+    <!-- Logo (centered absolutely) -->
+    <a class="site-header__logo" href="#">AUREA <em>TEA</em></a>
+
+    <!-- Right nav -->
+    <nav class="nav" aria-label="Right navigation">
+      <a class="nav__link" href="#instagram">Story</a>
+      <a class="nav__link" href="#footer">Access</a>
+    </nav>
+
+    <!-- Hamburger -->
+    <button class="header__hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════ HERO -->
+  <section class="hero" id="hero" aria-label="Hero">
+    <div class="hero__bg" id="heroBg"></div>
+    <div class="hero__overlay"></div>
+    <div class="hero__noise"></div>
+
+    <div class="hero__content">
+      <span class="hero__eyebrow">Tokyo · Omotesando — Salon &amp; Boutique</span>
+      <h1 class="hero__title">心を満たす、<br>一杯の静寂。</h1>
+      <p class="hero__subtitle">A moment of serenity, steeped in every cup.</p>
+      <a class="hero__cta" href="#portal">Explore Our World</a>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <div class="hero__scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════ NEWS -->
+  <section class="news" id="news" aria-labelledby="newsLabel">
+    <div class="container">
+      <p class="news__label reveal" id="newsLabel">Latest News</p>
+      <ul class="news__list" role="list">
+        <li class="news__item reveal reveal-d1">
+          <time class="news__date" datetime="2025-05-10">2025.05.10</time>
+          <span class="news__tag">New Arrival</span>
+          <p class="news__text">ダージリン ファーストフラッシュ 2025年産 入荷のお知らせ</p>
+        </li>
+        <li class="news__item reveal reveal-d2">
+          <time class="news__date" datetime="2025-05-01">2025.05.01</time>
+          <span class="news__tag">Event</span>
+          <p class="news__text">6月よりティーセミナー「紅茶の産地を旅する」シリーズ開催決定</p>
+        </li>
+        <li class="news__item reveal reveal-d3">
+          <time class="news__date" datetime="2025-04-20">2025.04.20</time>
+          <span class="news__tag">Info</span>
+          <p class="news__text">ゴールデンウィーク期間中（5/3〜5/6）の営業時間についてのご案内</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════ PORTAL -->
+  <section class="portal" id="portal" aria-labelledby="portalHeading">
+    <div class="container">
+      <div class="section-intro">
+        <span class="section-eyebrow reveal">Explore</span>
+        <h2 class="section-heading reveal" id="portalHeading">Our Spaces</h2>
+        <span class="gold-rule reveal"></span>
+      </div>
+
+      <div class="portal__grid">
+
+        <!-- Salon -->
+        <a class="portal__card reveal reveal-d1" href="#" role="article">
+          <div class="portal__card-body">
+            <svg class="portal__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/>
+              <line x1="6" x2="6" y1="2" y2="4"/>
+              <line x1="10" x2="10" y1="2" y2="4"/>
+              <line x1="14" x2="14" y1="2" y2="4"/>
+            </svg>
+            <span class="portal__sub">Reservation</span>
+            <h3 class="portal__title">Salon</h3>
+            <p class="portal__desc">ゆったりとした空間で、厳選された茶葉の世界へご案内します。</p>
+            <span class="portal__arrow">Reserve →</span>
+          </div>
+        </a>
+
+        <!-- Shop -->
+        <a class="portal__card reveal reveal-d2" href="#" role="article">
+          <div class="portal__card-body">
+            <svg class="portal__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" x2="21" y1="6" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <span class="portal__sub">Online Store</span>
+            <h3 class="portal__title">Shop</h3>
+            <p class="portal__desc">世界各地の希少な茶葉をご自宅へお届けします。</p>
+            <span class="portal__arrow">Shop Now →</span>
+          </div>
+        </a>
+
+        <!-- Our Story -->
+        <a class="portal__card reveal reveal-d3" href="#" role="article">
+          <div class="portal__card-body">
+            <svg class="portal__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+            <span class="portal__sub">Philosophy</span>
+            <h3 class="portal__title">Our Story</h3>
+            <p class="portal__desc">AUREA TEAが大切にしている、紅茶への想いと信念。</p>
+            <span class="portal__arrow">Read More →</span>
+          </div>
+        </a>
+
+        <!-- Access -->
+        <a class="portal__card reveal reveal-d4" href="#footer" role="article">
+          <div class="portal__card-body">
+            <svg class="portal__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span class="portal__sub">Location</span>
+            <h3 class="portal__title">Access</h3>
+            <p class="portal__desc">東京・表参道。緑に囲まれた静かな路地に佇む店舗。</p>
+            <span class="portal__arrow">Get Directions →</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════ PRODUCTS -->
+  <section class="products" id="products" aria-labelledby="productsHeading">
+    <div class="container">
+      <div class="section-intro">
+        <span class="section-eyebrow reveal">This Month's Selection</span>
+        <h2 class="section-heading reveal" id="productsHeading">今月のおすすめ</h2>
+        <span class="gold-rule reveal"></span>
+      </div>
+
+      <div class="products__grid">
+
+        <!-- Darjeeling -->
+        <article class="product-card reveal reveal-d1">
+          <div class="product-card__media">
+            <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=800&h=600" alt="ダージリン ファーストフラッシュ" loading="lazy">
+            <span class="product-card__badge">First Flush</span>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__origin">India · Darjeeling</p>
+            <h3 class="product-card__name">ダージリン<br>ファーストフラッシュ</h3>
+            <p class="product-card__desc">春摘みならではの青みある香りと、透明感のある淡い水色。紅茶の「シャンパン」とも称される至高の一煎。</p>
+            <div class="product-card__footer">
+              <p class="product-card__price">¥3,200 <small>/ 50g</small></p>
+              <a class="btn-outline" href="#">詳しく見る</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Earl Grey -->
+        <article class="product-card reveal reveal-d2">
+          <div class="product-card__media">
+            <img src="https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?auto=format&fit=crop&q=80&w=800&h=600" alt="グランド アールグレイ" loading="lazy">
+            <span class="product-card__badge">Classic</span>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__origin">Ceylon · Blend</p>
+            <h3 class="product-card__name">グランド<br>アールグレイ</h3>
+            <p class="product-card__desc">ベルガモットの気品ある香りと、力強いセイロン茶の調和。午後のひとときを彩る優雅なブレンド。</p>
+            <div class="product-card__footer">
+              <p class="product-card__price">¥1,800 <small>/ 50g</small></p>
+              <a class="btn-outline" href="#">詳しく見る</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Seasonal -->
+        <article class="product-card reveal reveal-d3">
+          <div class="product-card__media">
+            <img src="https://images.unsplash.com/photo-1544787210-2211d44b565a?auto=format&fit=crop&q=80&w=800&h=600" alt="初夏の薫りブレンド" loading="lazy">
+            <span class="product-card__badge">Seasonal</span>
+          </div>
+          <div class="product-card__body">
+            <p class="product-card__origin">AUREA Original</p>
+            <h3 class="product-card__name">初夏の薫り<br>ブレンド</h3>
+            <p class="product-card__desc">白桃とジャスミンの香りが初夏を運ぶ、爽やかで清々しいオリジナルブレンド。</p>
+            <div class="product-card__footer">
+              <p class="product-card__price">¥2,400 <small>/ 50g</small></p>
+              <a class="btn-outline" href="#">詳しく見る</a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════ INSTAGRAM -->
+  <section class="instagram" id="instagram" aria-labelledby="instaHeading">
+    <div class="container">
+      <div class="section-intro">
+        <span class="section-eyebrow reveal">Instagram</span>
+        <h2 class="section-heading reveal" id="instaHeading">Follow us on Instagram</h2>
+        <p class="instagram__handle reveal">@aurea_tea_salon</p>
+        <span class="gold-rule reveal"></span>
+      </div>
+
+      <div class="instagram__grid">
+        <div class="insta-item reveal reveal-d1">
+          <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&q=80&w=600&h=600" alt="Instagram: Darjeeling tea" loading="lazy">
+          <div class="insta-item__overlay" aria-hidden="true">
+            <svg class="insta-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="insta-item reveal reveal-d2">
+          <img src="https://images.unsplash.com/photo-1571934811356-5cc061b6821f?auto=format&fit=crop&q=80&w=600&h=600" alt="Instagram: Earl Grey" loading="lazy">
+          <div class="insta-item__overlay" aria-hidden="true">
+            <svg class="insta-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="insta-item reveal reveal-d3">
+          <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&q=80&w=600&h=600" alt="Instagram: Sweets" loading="lazy">
+          <div class="insta-item__overlay" aria-hidden="true">
+            <svg class="insta-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="insta-item reveal reveal-d1">
+          <img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=600&h=600" alt="Instagram: Tea pot" loading="lazy">
+          <div class="insta-item__overlay" aria-hidden="true">
+            <svg class="insta-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="insta-item reveal reveal-d2">
+          <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&q=80&w=600&h=600" alt="Instagram: Cafe dessert" loading="lazy">
+          <div class="insta-item__overlay" aria-hidden="true">
+            <svg class="insta-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="insta-item reveal reveal-d3">
+          <img src="https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?auto=format&fit=crop&q=80&w=600&h=600" alt="Instagram: Tea brew" loading="lazy">
+          <div class="insta-item__overlay" aria-hidden="true">
+            <svg class="insta-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════ FOOTER -->
+  <footer class="site-footer" id="footer">
+    <div class="container">
+      <div class="footer__top">
+
+        <!-- Brand -->
+        <div>
+          <div class="footer__logo">AUREA <em>TEA</em></div>
+          <p class="footer__tagline">"A moment of serenity in every cup."</p>
+          <div class="footer__hours-badge">
+            <div class="pulse-dot" aria-hidden="true"></div>
+            <span>Open: 11:00 – 19:00</span>
+          </div>
+          <div class="footer__socials" style="margin-top: 0;">
+            <!-- Instagram -->
+            <a class="footer__social-btn" href="#" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </a>
+            <!-- X / Twitter -->
+            <a class="footer__social-btn" href="#" aria-label="X (Twitter)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 4l16 16M4 20L20 4"/>
+              </svg>
+            </a>
+            <!-- Facebook -->
+            <a class="footer__social-btn" href="#" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div>
+          <p class="footer__col-label">Navigation</p>
+          <nav class="footer__nav" aria-label="Footer navigation">
+            <a href="#">Salon & Tea Room</a>
+            <a href="#">Online Shop</a>
+            <a href="#">Our Story</a>
+            <a href="#">Tea Journal</a>
+            <a href="#">Gift</a>
+          </nav>
+        </div>
+
+        <!-- Information -->
+        <div>
+          <p class="footer__col-label">Information</p>
+          <nav class="footer__nav" aria-label="Footer information">
+            <a href="#">About AUREA TEA</a>
+            <a href="#">Reservation</a>
+            <a href="#">Catering</a>
+            <a href="#">Press</a>
+            <a href="#">Privacy Policy</a>
+          </nav>
+        </div>
+
+        <!-- Access + Newsletter -->
+        <div>
+          <p class="footer__col-label">Access</p>
+          <address class="footer__address" style="font-style: normal;">
+            〒150-0001<br>
+            東京都渋谷区神宮前 3-5-12<br>
+            アウレアビル 1F<br><br>
+            Tel: 03-xxxx-xxxx<br>
+            定休日：水曜日
+          </address>
+
+          <p class="footer__newsletter-note">最新情報をお届けします</p>
+          <form class="footer__form" id="newsletterForm" novalidate>
+            <input
+              class="footer__input"
+              type="email"
+              placeholder="your@email.com"
+              aria-label="Email address for newsletter"
+              id="newsletterEmail"
+            >
+            <button class="footer__submit" type="submit" id="newsletterBtn">登録</button>
+          </form>
+        </div>
+
+      </div>
+
+      <div class="footer__bottom">
+        <p class="footer__copy">© 2025 AUREA TEA: Salon &amp; Boutique. All rights reserved.</p>
+        <p class="footer__copy">Crafted with care in Tokyo</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════════ JAVASCRIPT -->
+  <script>
+    'use strict';
+
+    /* ── Header scroll behavior ────────────────────────────────────────── */
+    const header = document.getElementById('siteHeader');
+    let lastScrollY = 0;
+
+    function onScroll() {
+      const scrollY = window.scrollY;
+      header.classList.toggle('scrolled', scrollY > 72);
+      lastScrollY = scrollY;
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ── Hero parallax ─────────────────────────────────────────────────── */
+    const heroBg = document.getElementById('heroBg');
+
+    function onScrollParallax() {
+      const scrollY = window.scrollY;
+      if (scrollY < window.innerHeight * 1.5) {
+        heroBg.style.transform = `translateY(${scrollY * 0.38}px)`;
+      }
+    }
+    window.addEventListener('scroll', onScrollParallax, { passive: true });
+
+    /* ── Mobile menu ────────────────────────────────────────────────────── */
+    const mobileMenu    = document.getElementById('mobileMenu');
+    const hamburgerBtn  = document.getElementById('hamburgerBtn');
+    const mobileClose   = document.getElementById('mobileMenuClose');
+
+    function openMenu() {
+      mobileMenu.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    hamburgerBtn.addEventListener('click', openMenu);
+    mobileClose.addEventListener('click', closeMenu);
+
+    mobileMenu.querySelectorAll('[data-close]').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    /* ── Intersection Observer scroll animations ────────────────────────── */
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* ── Newsletter form ────────────────────────────────────────────────── */
+    const newsletterForm  = document.getElementById('newsletterForm');
+    const newsletterEmail = document.getElementById('newsletterEmail');
+    const newsletterBtn   = document.getElementById('newsletterBtn');
+
+    newsletterForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = newsletterEmail.value.trim();
+      if (!email || !email.includes('@')) return;
+
+      newsletterBtn.textContent = '✓ 登録完了';
+      newsletterBtn.style.background = 'var(--tea-green-mid)';
+      newsletterEmail.value = '';
+
+      setTimeout(() => {
+        newsletterBtn.textContent = '登録';
+        newsletterBtn.style.background = '';
+      }, 3500);
+    });
+
+    /* ── Lazy-load image fade ────────────────────────────────────────────── */
+    document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+      img.style.opacity = '0';
+      img.style.transition = 'opacity 0.6s ease';
+      img.addEventListener('load', () => { img.style.opacity = '1'; });
+      if (img.complete) img.style.opacity = '1';
+    });
+  </script>
+</body>
+</html>
