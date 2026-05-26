@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ENCRE — 珈琲と静寂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Grain texture overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <a href="#hero" class="nav__logo">ENCRE</a>
+    <ul class="nav__links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#access">Access</a></li>
+    </ul>
+    <button class="nav__toggle" id="navToggle" aria-label="メニューを開く" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a href="#about" class="mobile-menu__link">About</a>
+    <a href="#menu" class="mobile-menu__link">Menu</a>
+    <a href="#gallery" class="mobile-menu__link">Gallery</a>
+    <a href="#access" class="mobile-menu__link">Access</a>
+  </div>
+
+  <!-- ─── Hero ─────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="hero__orbs" aria-hidden="true">
+      <div class="orb orb--1"></div>
+      <div class="orb orb--2"></div>
+      <div class="orb orb--3"></div>
+    </div>
+    <div class="hero__content">
+      <p class="hero__eyebrow reveal">Specialty Coffee &amp; Slow Time</p>
+      <h1 class="hero__title">
+        <span class="hero__line reveal" style="--d:0.1s">珈琲と</span>
+        <span class="hero__line hero__line--italic reveal" style="--d:0.25s">静寂の</span>
+        <span class="hero__line reveal" style="--d:0.4s">あいだで</span>
+      </h1>
+      <p class="hero__location reveal" style="--d:0.55s">ENCRE CAFÉ &ensp;—&ensp; 東京・代々木上原</p>
+      <a href="#menu" class="hero__cta reveal" style="--d:0.7s">
+        <span>メニューを見る</span>
+        <svg viewBox="0 0 20 8" fill="none"><path d="M0 4h18M14 1l4 3-4 3" stroke="currentColor" stroke-width="1.2"/></svg>
+      </a>
+    </div>
+    <div class="hero__scroll" aria-hidden="true">
+      <div class="hero__scroll-track"><div class="hero__scroll-thumb"></div></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ─── About ────────────────────────────── -->
+  <section class="about" id="about">
+    <div class="about__inner">
+      <div class="about__text">
+        <span class="section-label js-reveal">— About</span>
+        <h2 class="about__heading js-reveal">
+          一杯の珈琲が<br><em>物語を語る</em>
+        </h2>
+        <p class="about__body js-reveal">ENCREは、世界各地から厳選したスペシャルティコーヒーと、静かな時間を提供する珈琲店です。豆の個性を最大限に引き出すために、バリスタが一杯一杯、丁寧に抽出しています。</p>
+        <p class="about__body js-reveal">喧騒から離れ、本を読んだり、考えを深めたり、ただ珈琲の香りに包まれる。そんな時間のために、この場所は存在しています。</p>
+        <div class="about__badge js-reveal">since 2019</div>
+      </div>
+      <div class="about__visual js-reveal" aria-hidden="true">
+        <div class="cup">
+          <div class="cup__steam">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="cup__body">
+            <div class="cup__liquid"></div>
+            <div class="cup__foam"></div>
+          </div>
+          <div class="cup__handle"></div>
+          <div class="cup__saucer"></div>
+        </div>
+        <div class="about__rings" aria-hidden="true">
+          <div class="ring ring--1"></div>
+          <div class="ring ring--2"></div>
+          <div class="ring ring--3"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Menu ─────────────────────────────── -->
+  <section class="menu-section" id="menu">
+    <div class="menu-section__header">
+      <span class="section-label js-reveal">— Menu</span>
+      <h2 class="menu-section__title js-reveal">Our Menu</h2>
+    </div>
+    <div class="menu-tabs js-reveal" role="tablist" aria-label="メニューカテゴリ">
+      <button class="menu-tab active" data-category="coffee" role="tab" aria-selected="true">Coffee</button>
+      <button class="menu-tab" data-category="tea" role="tab" aria-selected="false">Tea &amp; Others</button>
+      <button class="menu-tab" data-category="food" role="tab" aria-selected="false">Food</button>
+    </div>
+    <div class="menu-grid" id="menuGrid" aria-live="polite"></div>
+  </section>
+
+  <!-- ─── Marquee ───────────────────────────── -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <div class="marquee__inner">
+        <span>Specialty Coffee</span><span class="marquee__sep">◆</span>
+        <span>Single Origin</span><span class="marquee__sep">◆</span>
+        <span>Slow Brewing</span><span class="marquee__sep">◆</span>
+        <span>Seasonal Blends</span><span class="marquee__sep">◆</span>
+        <span>Artisan Roast</span><span class="marquee__sep">◆</span>
+        <span>Specialty Coffee</span><span class="marquee__sep">◆</span>
+        <span>Single Origin</span><span class="marquee__sep">◆</span>
+        <span>Slow Brewing</span><span class="marquee__sep">◆</span>
+        <span>Seasonal Blends</span><span class="marquee__sep">◆</span>
+        <span>Artisan Roast</span><span class="marquee__sep">◆</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Gallery ───────────────────────────── -->
+  <section class="gallery" id="gallery">
+    <div class="gallery__header">
+      <span class="section-label js-reveal">— Gallery</span>
+      <h2 class="gallery__title js-reveal">店内の様子</h2>
+    </div>
+    <div class="gallery__grid js-reveal">
+      <figure class="g-item g-item--tall" data-caption="Bar Counter">
+        <div class="g-visual gv-1"></div>
+        <figcaption>Bar Counter</figcaption>
+      </figure>
+      <figure class="g-item" data-caption="Espresso">
+        <div class="g-visual gv-2"></div>
+        <figcaption>Espresso</figcaption>
+      </figure>
+      <figure class="g-item" data-caption="Reading Corner">
+        <div class="g-visual gv-3"></div>
+        <figcaption>Reading Corner</figcaption>
+      </figure>
+      <figure class="g-item g-item--wide" data-caption="Pour Over">
+        <div class="g-visual gv-4"></div>
+        <figcaption>Pour Over</figcaption>
+      </figure>
+      <figure class="g-item" data-caption="Terrace">
+        <div class="g-visual gv-5"></div>
+        <figcaption>Terrace</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ─── Access ────────────────────────────── -->
+  <section class="access" id="access">
+    <div class="access__inner">
+      <div class="access__info">
+        <span class="section-label js-reveal">— Access</span>
+        <h2 class="access__title js-reveal">Visit Us</h2>
+        <ul class="access__list">
+          <li class="access__item js-reveal">
+            <span class="access__icon" aria-hidden="true">◎</span>
+            <div>
+              <p class="access__label">住所</p>
+              <p class="access__value">東京都渋谷区上原1-2-3<br>代々木上原駅 徒歩5分</p>
+            </div>
+          </li>
+          <li class="access__item js-reveal">
+            <span class="access__icon" aria-hidden="true">◎</span>
+            <div>
+              <p class="access__label">営業時間</p>
+              <p class="access__value">平日&ensp;08:00 — 20:00<br>土日祝&ensp;09:00 — 21:00</p>
+            </div>
+          </li>
+          <li class="access__item js-reveal">
+            <span class="access__icon" aria-hidden="true">◎</span>
+            <div>
+              <p class="access__label">定休日</p>
+              <p class="access__value">毎週火曜日</p>
+            </div>
+          </li>
+          <li class="access__item js-reveal">
+            <span class="access__icon" aria-hidden="true">◎</span>
+            <div>
+              <p class="access__label">お問い合わせ</p>
+              <p class="access__value">info@encre-cafe.jp<br>03-1234-5678</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="access__map js-reveal" aria-label="店舗周辺地図（イメージ）">
+        <div class="map">
+          <div class="map__grid"></div>
+          <div class="map__road map__road--h"></div>
+          <div class="map__road map__road--v"></div>
+          <div class="map__station">代々木上原駅</div>
+          <div class="map__pin">
+            <div class="map__pin-dot"></div>
+            <div class="map__pin-label">ENCRE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <p class="footer__logo">ENCRE</p>
+        <p class="footer__tagline">珈琲と静寂のあいだで</p>
+      </div>
+      <nav class="footer__nav" aria-label="フッターナビゲーション">
+        <a href="#about">About</a>
+        <a href="#menu">Menu</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#access">Access</a>
+      </nav>
+      <div class="footer__social">
+        <a href="#" aria-label="Instagram">Instagram</a>
+        <a href="#" aria-label="Twitter/X">Twitter</a>
+      </div>
+    </div>
+    <p class="footer__copy">© 2024 ENCRE CAFÉ. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
