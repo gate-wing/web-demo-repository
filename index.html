@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>居酒屋 てまり — おかえり、いつもの席へ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Klee+One:wght@400;600&family=Shippori+Mincho:wght@400;500;600;700&family=Yuji+Syuku&display=swap" rel="stylesheet">
+
+<style>
+/* ===========================
+   CSS CUSTOM PROPERTIES
+=========================== */
+:root {
+  --bg-base: #F5ECD7;
+  --bg-warm: #EFE2C4;
+  --bg-dark: #4A3728;
+  --chalkboard: #2C3E2D;
+  --chalk-white: #F2EBD5;
+  --accent-red: #C84B31;
+  --accent-orange: #E8834E;
+  --accent-gold: #D4A843;
+  --text-dark: #2E1F0F;
+  --text-mid: #6B4C35;
+  --text-light: #9E7A58;
+  --font-display: 'Yuji Syuku', serif;
+  --font-body: 'Shippori Mincho', serif;
+  --font-hand: 'Klee One', cursive;
+  --font-roman: 'Caveat', cursive;
+}
+
+/* ===========================
+   RESET & BASE
+=========================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-dark);
+  font-family: var(--font-body);
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* Washi paper grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px;
+}
+
+img { display: block; width: 100%; height: auto; }
+
+a { text-decoration: none; color: inherit; }
+
+/* ===========================
+   TYPOGRAPHY HELPERS
+=========================== */
+.font-display { font-family: var(--font-display); }
+.font-hand { font-family: var(--font-hand); }
+.font-roman { font-family: var(--font-roman); }
+
+/* ===========================
+   DECORATIVE HELPERS
+=========================== */
+.gold-rule {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: var(--font-roman);
+  color: var(--accent-orange);
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* ===========================
+   NAVIGATION
+=========================== */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  background: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+  height: 64px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+
+/* Wood grain texture on nav */
+.nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 3px,
+    rgba(255,255,255,0.015) 3px,
+    rgba(255,255,255,0.015) 4px
+  );
+  pointer-events: none;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--bg-base);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  letter-spacing: 0.05em;
+}
+
+.nav-logo-emblem {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--accent-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: var(--accent-gold);
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-hand);
+  font-size: 0.85rem;
+  color: #C9B49A;
+  letter-spacing: 0.08em;
+  position: relative;
+  padding-bottom: 2px;
+  transition: color 0.3s;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--accent-orange);
+  transition: width 0.35s cubic-bezier(0.4,0,0.2,1);
+  border-radius: 2px;
+}
+
+.nav-links a:hover {
+  color: var(--bg-base);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+.nav-open-badge {
+  font-family: var(--font-roman);
+  font-size: 0.8rem;
+  color: var(--chalkboard);
+  background: #9DC08B;
+  padding: 0.2rem 0.8rem;
+  border-radius: 999px;
+  letter-spacing: 0.06em;
+  transform: rotate(-1.5deg);
+  display: inline-block;
+  box-shadow: 1px 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ===========================
+   HERO
+=========================== */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--bg-dark);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #3A2418 0%, #1C1008 100%);
+}
+
+.hero-bg img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+  mix-blend-mode: luminosity;
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 60%, rgba(200, 75, 49, 0.35) 0%, transparent 60%),
+    radial-gradient(ellipse at 75% 30%, rgba(212, 168, 67, 0.2) 0%, transparent 50%);
+}
+
+/* Warm light glow */
+.hero-glow {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 131, 78, 0.2) 0%, transparent 70%);
+  top: 20%;
+  right: 15%;
+  animation: flicker 4s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  33% { opacity: 0.85; transform: scale(1.04); }
+  66% { opacity: 0.95; transform: scale(0.97); }
+}
+
+/* Wavy torn-paper bottom edge */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--bg-base);
+  clip-path: polygon(
+    0% 100%, 0% 50%,
+    2% 30%, 4% 50%, 6% 25%,
+    8% 40%, 10% 20%, 12% 45%,
+    14% 30%, 16% 55%, 18% 35%,
+    20% 50%, 22% 28%, 24% 45%,
+    26% 22%, 28% 42%, 30% 30%,
+    32% 50%, 34% 32%, 36% 48%,
+    38% 25%, 40% 45%, 42% 30%,
+    44% 50%, 46% 28%, 48% 44%,
+    50% 20%, 52% 42%, 54% 28%,
+    56% 48%, 58% 30%, 60% 50%,
+    62% 22%, 64% 45%, 66% 28%,
+    68% 50%, 70% 32%, 72% 48%,
+    74% 25%, 76% 44%, 78% 30%,
+    80% 52%, 82% 28%, 84% 46%,
+    86% 22%, 88% 42%, 90% 30%,
+    92% 50%, 94% 28%, 96% 45%,
+    98% 30%, 100% 50%, 100% 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 8%;
+  padding-top: 64px;
+  max-width: 700px;
+  animation: fadeInUp 1.2s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-sub {
+  font-family: var(--font-roman);
+  color: var(--accent-orange);
+  font-size: 1.1rem;
+  letter-spacing: 0.25em;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeInUp 1s ease 0.3s forwards;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  color: var(--bg-base);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeInUp 1s ease 0.5s forwards;
+}
+
+.hero-title span {
+  color: var(--accent-gold);
+}
+
+.hero-desc {
+  font-family: var(--font-hand);
+  color: #C9B49A;
+  font-size: 1rem;
+  line-height: 2;
+  max-width: 420px;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeInUp 1s ease 0.7s forwards;
+}
+
+.hero-stamp {
+  position: absolute;
+  top: 20%;
+  right: 10%;
+  transform: rotate(8deg);
+  font-family: var(--font-roman);
+  font-size: 1rem;
+  color: var(--accent-red);
+  border: 2.5px solid var(--accent-red);
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  opacity: 0.85;
+  z-index: 3;
+  letter-spacing: 0.1em;
+  text-align: center;
+  line-height: 1.5;
+  animation: fadeInUp 1s ease 1s forwards;
+}
+
+.hero-stamp::before {
+  content: '本日';
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  border-bottom: 1px solid rgba(200,75,49,0.4);
+  margin-bottom: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+
+.btn-primary {
+  display: inline-block;
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  color: var(--bg-base);
+  background: var(--accent-red);
+  padding: 0.9rem 2.5rem;
+  border-radius: 6px;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 18px rgba(200, 75, 49, 0.4), 3px 3px 0 #8B2A14;
+  opacity: 0;
+  animation: fadeInUp 1s ease 0.9s forwards;
+}
+
+.btn-primary:hover {
+  background: #A83020;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(200, 75, 49, 0.5), 3px 5px 0 #8B2A14;
+}
+
+/* ===========================
+   OWNER SECTION
+=========================== */
+.owner-section {
+  padding: 8rem 8%;
+  position: relative;
+  overflow: hidden;
+}
+
+.owner-section::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, var(--accent-red), var(--accent-orange));
+  border-radius: 0 4px 4px 0;
+}
+
+/* Washi texture */
+.owner-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 400px;
+  mix-blend-mode: multiply;
+}
+
+.owner-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.owner-photo-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.owner-photo {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 8px solid var(--bg-base);
+  box-shadow:
+    0 0 0 3px var(--accent-gold),
+    4px 8px 32px rgba(74, 55, 40, 0.25),
+    -2px -2px 0 var(--accent-gold);
+  transform: rotate(-2deg);
+  background: linear-gradient(135deg, #D4A843 0%, #C84B31 50%, #4A3728 100%);
+  flex-shrink: 0;
+}
+
+.owner-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.owner-text-area {}
+
+.owner-text-area .section-label {
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+
+.owner-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  color: var(--text-dark);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.owner-name {
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.owner-name::before,
+.owner-name::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-gold), transparent);
+  max-width: 40px;
+}
+
+.owner-body {
+  font-family: var(--font-body);
+  font-size: 0.97rem;
+  line-height: 2.1;
+  color: var(--text-mid);
+}
+
+.owner-signature {
+  margin-top: 1.8rem;
+  font-family: var(--font-roman);
+  font-size: 1.8rem;
+  color: var(--accent-red);
+  transform: rotate(-1deg);
+  display: inline-block;
+}
+
+/* ===========================
+   CHALKBOARD SECTION
+=========================== */
+.chalk-section {
+  background: var(--chalkboard);
+  padding: 5rem 8%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Chalk dust texture */
+.chalk-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='chalk'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23chalk)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Chalk frame border */
+.chalk-section::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 2px dashed rgba(242, 235, 213, 0.2);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.chalk-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.chalk-en {
+  font-family: var(--font-roman);
+  font-size: 1rem;
+  color: rgba(242, 235, 213, 0.5);
+  letter-spacing: 0.3em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.chalk-title {
+  font-family: var(--font-hand);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--chalk-white);
+  text-shadow:
+    1px 1px 0 rgba(255,255,255,0.1),
+    -1px -1px 0 rgba(0,0,0,0.1),
+    0 0 8px rgba(242, 235, 213, 0.3);
+  position: relative;
+}
+
+/* Hand-drawn underline */
+.chalk-title::after {
+  content: '〜〜〜〜〜〜〜〜';
+  display: block;
+  font-size: 0.9rem;
+  color: rgba(212, 168, 67, 0.7);
+  margin-top: 0.3rem;
+  letter-spacing: 0.15em;
+}
+
+.chalk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.chalk-item {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(242, 235, 213, 0.15);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: background 0.3s;
+  border-radius: 4px;
+}
+
+.chalk-item:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.chalk-bullet {
+  color: var(--accent-gold);
+  font-family: var(--font-roman);
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+  text-shadow: 0 0 6px rgba(212,168,67,0.6);
+}
+
+.chalk-item-body {
+  flex: 1;
+}
+
+.chalk-dish-name {
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+  color: var(--chalk-white);
+  text-shadow: 0 0 6px rgba(242, 235, 213, 0.25);
+  margin-bottom: 0.3rem;
+}
+
+.chalk-dish-note {
+  font-family: var(--font-hand);
+  font-size: 0.82rem;
+  color: rgba(242, 235, 213, 0.6);
+  line-height: 1.6;
+}
+
+.chalk-price {
+  font-family: var(--font-roman);
+  font-size: 1.4rem;
+  color: var(--accent-gold);
+  text-shadow: 0 0 8px rgba(212, 168, 67, 0.5);
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+/* ===========================
+   INGREDIENTS SECTION
+=========================== */
+.ingredients-section {
+  padding: 8rem 8%;
+  background: var(--bg-warm);
+  position: relative;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  color: var(--text-dark);
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.ingredients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.ingredient-card {
+  background: var(--bg-base);
+  border-radius: 12px 4px 12px 4px;
+  padding: 1.5rem;
+  box-shadow: 4px 6px 24px rgba(74, 55, 40, 0.12);
+  border-top: 4px solid var(--accent-orange);
+  transform: rotate(var(--rot, 0deg));
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+}
+
+.ingredient-card:nth-child(1) { --rot: -1.5deg; }
+.ingredient-card:nth-child(2) { --rot: 0.8deg; }
+.ingredient-card:nth-child(3) { --rot: -0.5deg; }
+.ingredient-card:nth-child(4) { --rot: 1.2deg; }
+
+.ingredient-card:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 6px 12px 32px rgba(74, 55, 40, 0.2);
+}
+
+/* Pin/nail at top */
+.ingredient-card::before {
+  content: '●';
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent-red);
+  font-size: 0.7rem;
+  width: 14px;
+  height: 14px;
+  background: var(--accent-red);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(200,75,49,0.4);
+}
+
+.ingredient-tag {
+  display: inline-block;
+  font-family: var(--font-roman);
+  font-size: 0.72rem;
+  color: var(--accent-orange);
+  border: 1px solid var(--accent-orange);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.8rem;
+}
+
+.ingredient-img {
+  width: 100%;
+  height: 130px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #D4A843 0%, #C84B31 100%);
+  margin-bottom: 1rem;
+  display: block;
+  overflow: hidden;
+}
+
+.ingredient-name {
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  margin-bottom: 0.3rem;
+}
+
+.ingredient-origin {
+  font-family: var(--font-roman);
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+/* ===========================
+   POLAROID GALLERY
+=========================== */
+.gallery-section {
+  padding: 8rem 8%;
+  position: relative;
+  background-color: #EDE3CC;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='washi'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='5' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0.2'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='0.6' intercept='0.35'/%3E%3CfeFuncG type='linear' slope='0.55' intercept='0.3'/%3E%3CfeFuncB type='linear' slope='0.4' intercept='0.22'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23washi)' opacity='0.55'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(180,155,110,0.06) 3px,
+      rgba(180,155,110,0.06) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 8px,
+      rgba(160,130,90,0.04) 8px,
+      rgba(160,130,90,0.04) 9px
+    );
+  background-size: 400px 400px, 100% 100%, 100% 100%;
+}
+
+/* Twine string decoration */
+.gallery-section::before {
+  content: '';
+  position: absolute;
+  top: 4rem;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 5%,
+    #C9B49A 5%,
+    #C9B49A 95%,
+    transparent 95%
+  );
+  opacity: 0.5;
+}
+
+/* ---- Slider wrapper ---- */
+.slider-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.slider-viewport {
+  overflow: hidden;
+  flex: 1;
+  padding: 2.5rem 0.5rem 3.5rem;
+}
+
+.slider-track {
+  display: flex;
+  gap: 2rem;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* ---- Slider arrows ---- */
+.slider-btn {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-dark);
+  color: var(--bg-base);
+  border: 2px solid var(--accent-gold);
+  font-family: var(--font-roman);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.25s, transform 0.2s, opacity 0.25s;
+  box-shadow: 2px 3px 10px rgba(0,0,0,0.2);
+}
+
+.slider-btn:hover {
+  background: var(--accent-red);
+  transform: scale(1.08);
+}
+
+.slider-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  transform: none;
+}
+
+/* ---- Dots ---- */
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.slider-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(74, 55, 40, 0.25);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.slider-dot.active {
+  background: var(--accent-red);
+  transform: scale(1.35);
+}
+
+.polaroid {
+  flex: 0 0 calc((100% - 4rem) / 3);
+  background: #FEFAF4;
+  padding: 1rem 1rem 3.5rem;
+  box-shadow:
+    3px 4px 16px rgba(74, 55, 40, 0.18),
+    0 0 0 1px rgba(74,55,40,0.06);
+  transform: rotate(var(--p-rot, 0deg));
+  transition: transform 0.35s cubic-bezier(0.2, 0, 0.2, 1.6), box-shadow 0.35s;
+  cursor: default;
+  position: relative;
+}
+
+.polaroid:nth-child(1) { --p-rot: -3deg; }
+.polaroid:nth-child(2) { --p-rot: 1.5deg; }
+.polaroid:nth-child(3) { --p-rot: -1deg; }
+.polaroid:nth-child(4) { --p-rot: 2.5deg; }
+.polaroid:nth-child(5) { --p-rot: -2deg; }
+
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.06) translateY(-6px);
+  box-shadow:
+    8px 16px 40px rgba(74, 55, 40, 0.28),
+    0 0 0 1px rgba(74,55,40,0.08);
+  z-index: 10;
+}
+
+.polaroid-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  background: linear-gradient(135deg, #4A3728 0%, #8B5E3C 100%);
+  border-radius: 2px;
+}
+
+.polaroid-caption {
+  position: absolute;
+  bottom: 0.8rem;
+  left: 1rem;
+  right: 1rem;
+  font-family: var(--font-roman);
+  font-size: 0.95rem;
+  color: var(--text-mid);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Pin at top of polaroid — 食材カードと統一 */
+.polaroid::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background: var(--accent-red);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(200, 75, 49, 0.45);
+}
+
+/* ===========================
+   INFO SECTION
+=========================== */
+.info-section {
+  padding: 8rem 8%;
+  background: var(--bg-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Wood grain */
+.info-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    88deg,
+    transparent,
+    transparent 60px,
+    rgba(255,255,255,0.01) 60px,
+    rgba(255,255,255,0.01) 61px
+  ), repeating-linear-gradient(
+    92deg,
+    transparent,
+    transparent 40px,
+    rgba(0,0,0,0.04) 40px,
+    rgba(0,0,0,0.04) 41px
+  );
+  pointer-events: none;
+}
+
+.info-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+  position: relative;
+}
+
+.info-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  color: var(--bg-base);
+  margin-bottom: 2rem;
+}
+
+.info-title span {
+  color: var(--accent-gold);
+}
+
+.hours-board {
+  background: var(--chalkboard);
+  border-radius: 8px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: inset 0 2px 12px rgba(0,0,0,0.3), 4px 6px 20px rgba(0,0,0,0.3);
+}
+
+.hours-board::before {
+  content: '営業時間';
+  position: absolute;
+  top: -0.7rem;
+  left: 1.5rem;
+  font-family: var(--font-roman);
+  font-size: 0.75rem;
+  color: var(--chalkboard);
+  background: var(--accent-gold);
+  padding: 0.15rem 0.7rem;
+  border-radius: 3px;
+  letter-spacing: 0.1em;
+}
+
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed rgba(242, 235, 213, 0.15);
+  font-family: var(--font-hand);
+}
+
+.hours-row:last-child { border-bottom: none; }
+
+.hours-day {
+  color: rgba(242, 235, 213, 0.7);
+  font-size: 0.9rem;
+}
+
+.hours-time {
+  color: var(--chalk-white);
+  font-size: 0.95rem;
+  text-shadow: 0 0 6px rgba(242,235,213,0.2);
+}
+
+.hours-time.closed {
+  color: rgba(200, 75, 49, 0.8);
+}
+
+.map-placeholder {
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2C3E2D 0%, #1a2a1c 100%);
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-hand);
+  color: rgba(242, 235, 213, 0.5);
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+  position: relative;
+  box-shadow: 4px 6px 20px rgba(0,0,0,0.25);
+}
+
+.map-placeholder::before {
+  content: '📍';
+  font-size: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+}
+
+.access-text {
+  font-family: var(--font-hand);
+  color: #C9B49A;
+  font-size: 0.9rem;
+  line-height: 2;
+}
+
+.access-text strong {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+.footer {
+  background: #1C1008;
+  padding: 3rem 8% 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(212, 168, 67, 0.2);
+}
+
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--bg-base);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+}
+
+.footer-tagline {
+  font-family: var(--font-roman);
+  color: var(--accent-gold);
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 2rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.footer-links a {
+  font-family: var(--font-hand);
+  color: #9E7A58;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--bg-base); }
+
+.footer-copy {
+  font-family: var(--font-roman);
+  color: #5A4030;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+
+/* ===========================
+   DIVIDER ORNAMENT
+=========================== */
+.ornament-divider {
+  text-align: center;
+  font-family: var(--font-roman);
+  color: var(--accent-gold);
+  font-size: 1.2rem;
+  letter-spacing: 0.5em;
+  margin: 0;
+  padding: 2rem;
+  opacity: 0.5;
+  user-select: none;
+}
+
+/* ===========================
+   SCROLL REVEAL
+=========================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-stagger.visible > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.1s; }
+.reveal-stagger.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.2s; }
+.reveal-stagger.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.3s; }
+.reveal-stagger.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.4s; }
+.reveal-stagger.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.5s; }
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .owner-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .owner-photo { width: 180px; height: 180px; }
+  .info-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .hero-stamp { display: none; }
+  .polaroid { flex: 0 0 100%; }
+  .polaroid-img { height: 160px; }
+  .slider-btn { width: 36px; height: 36px; font-size: 1.1rem; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===========================
+     NAVIGATION
+=========================== -->
+<nav class="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-emblem">ま</div>
+    居酒屋 てまり
+  </div>
+  <ul class="nav-links">
+    <li><a href="#about">店主より</a></li>
+    <li><a href="#menu">本日のメニュー</a></li>
+    <li><a href="#gallery">お料理</a></li>
+    <li><a href="#info">アクセス</a></li>
+  </ul>
+  <span class="nav-open-badge">OPEN 17:00〜</span>
+</nav>
+
+
+<!-- ===========================
+     HERO
+=========================== -->
+<section class="hero">
+  <div class="hero-bg">
+    <img
+      src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=1600&h=900&fit=crop&q=80"
+      alt="居酒屋の温かな店内"
+      onerror="this.style.display='none'"
+      loading="eager"
+    >
+  </div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <span class="hero-sub">Izakaya Temari — Since 1987</span>
+    <h1 class="hero-title">おかえり、<br><span>いつもの席</span>へ。</h1>
+    <p class="hero-desc">
+      昭和62年創業。変わらない手仕事と、<br>
+      その日の仕入れで決まる一皿。<br>
+      今夜もゆっくり、召し上がれ。
+    </p>
+    <a href="#menu" class="btn-primary">本日のおすすめを見る</a>
+  </div>
+
+  <div class="hero-stamp">営業中<br>本日も仕込み完了</div>
+</section>
+
+
+<!-- ===========================
+     OWNER SECTION
+=========================== -->
+<section class="owner-section" id="about">
+  <div class="owner-inner reveal">
+    <div class="owner-photo-wrap">
+      <div class="owner-photo">
+        <img
+          src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=480&h=480&fit=crop&q=80"
+          alt="店主 松本幸枝"
+          onerror="this.parentElement.innerHTML='🍶'; this.parentElement.style.cssText+='display:flex;align-items:center;justify-content:center;font-size:5rem;'"
+          loading="lazy"
+        >
+      </div>
+    </div>
+    <div class="owner-text-area">
+      <span class="section-label">About the Owner</span>
+      <h2 class="owner-title">毎朝市場に行くのが、<br>三十年来の習慣です。</h2>
+      <p class="owner-name">店主 ・ 松本 幸枝</p>
+      <p class="owner-body">
+        この店を開いたのは、娘が生まれた年でした。<br>
+        料理に派手さはいりません。ただ、今日仕入れたもの、<br>
+        今夜食べてもらいたいものを、丁寧に出す。<br><br>
+        お客さんの「うまい」が聞けるのが、今でも一番うれしいことです。<br>
+        気取らず、ゆっくり過ごしていただけたら、それで十分です。
+      </p>
+      <div class="owner-signature">Yukie Matsumoto</div>
+    </div>
+  </div>
+</section>
+
+<div class="ornament-divider">✦ ✦ ✦</div>
+
+
+<!-- ===========================
+     CHALKBOARD MENU
+=========================== -->
+<section class="chalk-section" id="menu">
+  <div class="chalk-header reveal">
+    <span class="chalk-en">Today's Special</span>
+    <h2 class="chalk-title">本日のおすすめ</h2>
+  </div>
+
+  <div class="chalk-grid reveal-stagger">
+    <div class="chalk-item">
+      <span class="chalk-bullet">◆</span>
+      <div class="chalk-item-body">
+        <div class="chalk-dish-name">明石のタコ刺し</div>
+        <div class="chalk-dish-note">今朝6時に届いたばかり。歯ごたえが違います</div>
+      </div>
+      <div class="chalk-price">¥680</div>
+    </div>
+    <div class="chalk-item">
+      <span class="chalk-bullet">◆</span>
+      <div class="chalk-item-body">
+        <div class="chalk-dish-name">鯖の味噌煮</div>
+        <div class="chalk-dish-note">こだわりの八丁味噌でじっくり炊きました</div>
+      </div>
+      <div class="chalk-price">¥750</div>
+    </div>
+    <div class="chalk-item">
+      <span class="chalk-bullet">◆</span>
+      <div class="chalk-item-body">
+        <div class="chalk-dish-name">春野菜の天ぷら盛り</div>
+        <div class="chalk-dish-note">たらの芽・こごみ・菜の花、旬の恵みを</div>
+      </div>
+      <div class="chalk-price">¥820</div>
+    </div>
+    <div class="chalk-item">
+      <span class="chalk-bullet">◆</span>
+      <div class="chalk-item-body">
+        <div class="chalk-dish-name">豚バラと大根の煮物</div>
+        <div class="chalk-dish-note">昨日から仕込んだ、てまりの定番です</div>
+      </div>
+      <div class="chalk-price">¥680</div>
+    </div>
+    <div class="chalk-item">
+      <span class="chalk-bullet">◆</span>
+      <div class="chalk-item-body">
+        <div class="chalk-dish-name">焼き鳥 盛り合わせ</div>
+        <div class="chalk-dish-note">地鶏を当日しめ。たれと塩、おすすめは塩</div>
+      </div>
+      <div class="chalk-price">¥900</div>
+    </div>
+    <div class="chalk-item">
+      <span class="chalk-bullet">◆</span>
+      <div class="chalk-item-body">
+        <div class="chalk-dish-name">本日のお造り三点</div>
+        <div class="chalk-dish-note">市場で選んだ魚をその日に。内容はお楽しみに</div>
+      </div>
+      <div class="chalk-price">¥980</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===========================
+     INGREDIENTS
+=========================== -->
+<section class="ingredients-section">
+  <div class="section-header reveal">
+    <span class="section-label">From the Market</span>
+    <h2 class="section-title">今日届いた食材</h2>
+    <div class="gold-rule" style="margin-top:1rem;"></div>
+  </div>
+
+  <div class="ingredients-grid reveal-stagger">
+    <div class="ingredient-card">
+      <span class="ingredient-tag">今朝 淡路島から</span>
+      <img class="ingredient-img"
+        src="https://images.unsplash.com/photo-1535399831941-5e57dfca5d24?w=400&h=260&fit=crop&q=80"
+        alt="明石のタコ"
+        onerror="this.style.display='none'"
+        loading="lazy"
+      >
+      <div class="ingredient-name">明石のタコ</div>
+      <div class="ingredient-origin">産地 ▸ 兵庫県明石市</div>
+    </div>
+    <div class="ingredient-card">
+      <span class="ingredient-tag">旬 春野菜</span>
+      <img class="ingredient-img"
+        src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=260&fit=crop&q=80"
+        alt="たらの芽・こごみ"
+        onerror="this.style.display='none'"
+        loading="lazy"
+      >
+      <div class="ingredient-name">たらの芽・こごみ</div>
+      <div class="ingredient-origin">産地 ▸ 長野県小諸市</div>
+    </div>
+    <div class="ingredient-card">
+      <span class="ingredient-tag">今朝 市場より</span>
+      <img class="ingredient-img"
+        src="https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=400&h=260&fit=crop&q=80"
+        alt="真鯛・鰆"
+        onerror="this.style.display='none'"
+        loading="lazy"
+      >
+      <div class="ingredient-name">真鯛・鰆</div>
+      <div class="ingredient-origin">産地 ▸ 愛媛県宇和島</div>
+    </div>
+    <div class="ingredient-card">
+      <span class="ingredient-tag">近郊農家直送</span>
+      <img class="ingredient-img"
+        src="https://images.unsplash.com/photo-1518977676888-4a19e4a9a6a3?w=400&h=260&fit=crop&q=80"
+        alt="朝採り新玉ねぎ"
+        onerror="this.style.display='none'"
+        loading="lazy"
+      >
+      <div class="ingredient-name">朝採り新玉ねぎ</div>
+      <div class="ingredient-origin">産地 ▸ 滋賀県野洲市</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===========================
+     POLAROID GALLERY
+=========================== -->
+<section class="gallery-section" id="gallery">
+  <div class="section-header reveal">
+    <span class="section-label">Our Dishes</span>
+    <h2 class="section-title">てまりのお料理</h2>
+    <div class="gold-rule" style="margin-top:1rem;"></div>
+  </div>
+
+  <div class="slider-wrapper reveal">
+    <button class="slider-btn slider-prev" aria-label="前へ">&#8249;</button>
+    <div class="slider-viewport">
+      <div class="slider-track" id="sliderTrack">
+        <div class="polaroid">
+          <img class="polaroid-img"
+            src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=380&h=320&fit=crop&q=80"
+            alt="てまりのおでん"
+            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=380&h=320&fit=crop&q=80'"
+            loading="lazy"
+          >
+          <div class="polaroid-caption">おでんは冬の定番<br>大根が沁みてます</div>
+        </div>
+        <div class="polaroid">
+          <img class="polaroid-img"
+            src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=380&h=320&fit=crop&q=80"
+            alt="刺身三点盛り"
+            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=380&h=320&fit=crop&q=80'"
+            loading="lazy"
+          >
+          <div class="polaroid-caption">刺身三点盛り<br>今日は最高でした</div>
+        </div>
+        <div class="polaroid">
+          <img class="polaroid-img"
+            src="https://images.unsplash.com/photo-1555658636-6e4a36218be7?w=380&h=320&fit=crop&q=80"
+            alt="まずは一杯"
+            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=380&h=320&fit=crop&q=80'"
+            loading="lazy"
+          >
+          <div class="polaroid-caption">まずは一杯、どうぞ<br>お疲れ様でした</div>
+        </div>
+        <div class="polaroid">
+          <img class="polaroid-img"
+            src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=380&h=320&fit=crop&q=80"
+            alt="土鍋炊きご飯"
+            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=380&h=320&fit=crop&q=80'"
+            loading="lazy"
+          >
+          <div class="polaroid-caption">土鍋炊きご飯<br>〆にどうぞ</div>
+        </div>
+        <div class="polaroid">
+          <img class="polaroid-img"
+            src="https://images.unsplash.com/photo-1525059696034-4a743c13f9be?w=380&h=320&fit=crop&q=80"
+            alt="焼き鳥"
+            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=380&h=320&fit=crop&q=80'"
+            loading="lazy"
+          >
+          <div class="polaroid-caption">焼き鳥は塩で<br>地鶏の旨みを感じて</div>
+        </div>
+      </div>
+    </div>
+    <button class="slider-btn slider-next" aria-label="次へ">&#8250;</button>
+  </div>
+  <div class="slider-dots" id="sliderDots"></div>
+</section>
+
+<div class="ornament-divider">✦ ✦ ✦</div>
+
+
+<!-- ===========================
+     INFO / ACCESS
+=========================== -->
+<section class="info-section" id="info">
+  <div class="info-inner">
+    <div class="reveal">
+      <h2 class="info-title">ご来店の<span>ご案内</span></h2>
+      <div class="map-placeholder">地図を表示</div>
+      <div class="access-text">
+        <strong>住所</strong><br>
+        大阪府大阪市北区天神橋2丁目5-16<br><br>
+        <strong>アクセス</strong><br>
+        地下鉄堺筋線「扇町」駅より徒歩3分<br>
+        JR「天満」駅より徒歩5分<br><br>
+        <strong>お電話</strong><br>
+        06-XXXX-XXXX（予約優先）
+      </div>
+    </div>
+
+    <div class="reveal">
+      <h2 class="info-title">営業<span>時間</span></h2>
+      <div class="hours-board">
+        <div class="hours-row">
+          <span class="hours-day">月・火・水</span>
+          <span class="hours-time">17:00 〜 23:00</span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">木・金</span>
+          <span class="hours-time">17:00 〜 翌0:00</span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">土</span>
+          <span class="hours-time">15:00 〜 翌0:00</span>
+        </div>
+        <div class="hours-row">
+          <span class="hours-day">日・祝</span>
+          <span class="hours-time closed">定 休 日</span>
+        </div>
+      </div>
+
+      <div style="margin-top:2rem; padding:1.5rem; background:rgba(212,168,67,0.08); border-left:3px solid var(--accent-gold); border-radius:0 8px 8px 0;">
+        <p style="font-family:var(--font-hand); color:#C9B49A; font-size:0.9rem; line-height:1.9;">
+          ご予約は前日までにお電話にてお願いします。<br>
+          当日のご来店も歓迎ですが、<br>
+          混雑時はお待ちいただく場合がございます。
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===========================
+     FOOTER
+=========================== -->
+<footer class="footer">
+  <div class="footer-logo">居酒屋 てまり</div>
+  <div class="footer-tagline">Izakaya Temari — Since 1987, Osaka</div>
+  <nav class="footer-links">
+    <a href="#about">店主より</a>
+    <a href="#menu">本日のメニュー</a>
+    <a href="#gallery">お料理</a>
+    <a href="#info">アクセス</a>
+  </nav>
+  <p class="footer-copy">© 2026 居酒屋 てまり. All rights reserved.</p>
+</footer>
+
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => observer.observe(el));
+
+// ---- Polaroid Slider (自動再生・無限ループ) ----
+(function () {
+  const track    = document.getElementById('sliderTrack');
+  const dotsWrap = document.getElementById('sliderDots');
+  const prevBtn  = document.querySelector('.slider-prev');
+  const nextBtn  = document.querySelector('.slider-next');
+  const viewport = track.closest('.slider-viewport');
+  const slides   = Array.from(track.querySelectorAll('.polaroid'));
+  const TOTAL    = slides.length;
+  const GAP      = 32; // gap: 2rem
+  const DELAY    = 3500;
+  let current    = 0;
+  let timer      = null;
+
+  function visibleCount() {
+    return window.innerWidth < 768 ? 1 : 3;
+  }
+
+  // 末尾にクローンを追加して無限ループを実現
+  function buildClones() {
+    track.querySelectorAll('[data-clone]').forEach(c => c.remove());
+    slides.slice(0, visibleCount()).forEach(slide => {
+      const clone = slide.cloneNode(true);
+      clone.dataset.clone = '1';
+      track.appendChild(clone);
+    });
+  }
+
+  // ドット生成
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'slider-dot';
+    dot.setAttribute('aria-label', `${i + 1}枚目`);
+    dot.addEventListener('click', () => { goTo(i); resetTimer(); });
+    dotsWrap.appendChild(dot);
+  });
+  const dots = Array.from(dotsWrap.querySelectorAll('.slider-dot'));
+
+  function updateDots() {
+    const real = ((current % TOTAL) + TOTAL) % TOTAL;
+    dots.forEach((d, i) => d.classList.toggle('active', i === real));
+  }
+
+  function goTo(index, instant = false) {
+    current = index;
+    const slideWidth = slides[0].offsetWidth + GAP;
+    if (instant) {
+      track.style.transition = 'none';
+      track.style.transform = `translateX(-${current * slideWidth}px)`;
+      track.offsetHeight; // reflow
+      track.style.transition = '';
+    } else {
+      track.style.transform = `translateX(-${current * slideWidth}px)`;
+    }
+    updateDots();
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+  }
+
+  // クローン部分に達したらスムーズに先頭へ戻す
+  track.addEventListener('transitionend', () => {
+    if (current >= TOTAL) goTo(current - TOTAL, true);
+    else if (current < 0) goTo(current + TOTAL, true);
+  });
+
+  // 自動再生
+  function startTimer() { timer = setInterval(() => goTo(current + 1), DELAY); }
+  function stopTimer()  { clearInterval(timer); }
+  function resetTimer() { stopTimer(); startTimer(); }
+
+  // ホバー中は停止
+  viewport.addEventListener('mouseenter', stopTimer);
+  viewport.addEventListener('mouseleave', startTimer);
+
+  // 矢印ボタン
+  prevBtn.addEventListener('click', () => { goTo(current - 1); resetTimer(); });
+  nextBtn.addEventListener('click', () => { goTo(current + 1); resetTimer(); });
+
+  // タッチスワイプ
+  let touchStartX = 0;
+  track.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    stopTimer();
+  }, { passive: true });
+  track.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) goTo(current + (diff > 0 ? 1 : -1));
+    startTimer();
+  });
+
+  // リサイズ対応
+  window.addEventListener('resize', () => {
+    buildClones();
+    goTo(((current % TOTAL) + TOTAL) % TOTAL, true);
+  });
+
+  buildClones();
+  goTo(0, true);
+  startTimer();
+})();
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
