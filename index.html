@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鮨 吉兆 | 吉祥寺の江戸前鮨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;400;500&family=Noto+Serif+JP:wght@200;300;400;600&family=Zen+Maru+Gothic:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Variables ─────────────────────────────────────── */
+    :root {
+      --navy:       #0b1929;
+      --navy-mid:   #162438;
+      --navy-light: #1d3452;
+      --gold:       #c8a456;
+      --gold-lt:    #e2cc97;
+      --gold-dim:   rgba(200, 164, 86, 0.18);
+      --white:      #f5f0e8;
+      --cream:      #ede7db;
+      --text:       #2a2018;
+      --text-light: #6a5e50;
+    }
+
+    /* ─── Reset & Base ───────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--white);
+      color: var(--text);
+      font-family: 'Noto Serif JP', serif;
+      overflow-x: hidden;
+      padding-bottom: 72px;
+    }
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── Scroll Fade-in ─────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.d1 { transition-delay: 0.08s; }
+    .reveal.d2 { transition-delay: 0.18s; }
+    .reveal.d3 { transition-delay: 0.28s; }
+    .reveal.d4 { transition-delay: 0.38s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── Navigation ─────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      padding: 22px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.5s ease, padding 0.4s ease;
+    }
+    .nav.solid {
+      background: rgba(11, 25, 41, 0.96);
+      backdrop-filter: blur(14px);
+      padding: 14px 48px;
+      border-bottom: 1px solid rgba(200, 164, 86, 0.2);
+    }
+    .nav-logo {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: var(--white);
+      letter-spacing: 0.25em;
+    }
+    .nav-logo small {
+      display: block;
+      font-weight: 200;
+      font-size: 0.58rem;
+      letter-spacing: 0.35em;
+      opacity: 0.65;
+      margin-top: 2px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 0.78rem;
+      color: rgba(245, 240, 232, 0.75);
+      letter-spacing: 0.1em;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--gold-lt); }
+
+    /* ─── Hero ───────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100svh;
+      min-height: 580px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('image/food_1.jpg');
+      background-size: cover;
+      background-position: center 40%;
+      transform: scale(1.08);
+      transition: transform 9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .hero-bg.zoom-out { transform: scale(1.0); }
+
+    /* Multi-layer overlay: vignette + navy tint */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at center, transparent 30%, rgba(11, 25, 41, 0.55) 100%),
+        linear-gradient(160deg, rgba(11, 25, 41, 0.72) 0%, rgba(11, 25, 41, 0.25) 48%, rgba(11, 25, 41, 0.58) 100%);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 9%;
+    }
+
+    /* Vertical catchcopy */
+    .catchcopy-wrap {
+      display: flex;
+      flex-direction: row;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .catchcopy {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      font-size: clamp(1.25rem, 3vw, 2rem);
+      letter-spacing: 0.25em;
+      line-height: 1.75;
+      text-shadow: 0 4px 32px rgba(0,0,0,0.5);
+    }
+    .catchcopy:first-child { color: var(--white); }
+    .catchcopy:last-child  {
+      color: var(--gold-lt);
+      margin-top: 32px;
+    }
+
+    /* Circular badge */
+    .hero-badge {
+      position: absolute;
+      right: 9%;
+      bottom: 13%;
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 164, 86, 0.55);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--gold-lt);
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      line-height: 2;
+      animation: badgePulse 3s ease-in-out infinite;
+    }
+    @keyframes badgePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(200,164,86,0); }
+      50%       { box-shadow: 0 0 0 8px rgba(200,164,86,0.08); }
+    }
+
+    /* Scroll indicator */
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: rgba(245, 240, 232, 0.45);
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+    .scroll-bar {
+      width: 1px;
+      height: 44px;
+      background: linear-gradient(to bottom, transparent, rgba(245,240,232,0.45));
+      animation: scrollDrop 2.2s ease-in-out infinite;
+    }
+    @keyframes scrollDrop {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 0; }
+      50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* ─── Section base ───────────────────────────────────── */
+    .section { padding: 108px 9%; }
+
+    .sec-head { margin-bottom: 64px; }
+    .sec-title-en {
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+    .sec-title-ja {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 200;
+      font-size: 0.8rem;
+      letter-spacing: 0.28em;
+      margin-top: 6px;
+      opacity: 0.5;
+    }
+    .sec-rule {
+      width: 36px;
+      height: 1.5px;
+      background: var(--gold);
+      margin-top: 18px;
+    }
+
+    /* ─── Concept ─────────────────────────────────────────── */
+    .concept { background: var(--white); }
+    .concept .sec-title-en { color: var(--navy); }
+
+    .concept-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 88px;
+      align-items: center;
+    }
+
+    .concept-left { position: relative; }
+
+    .concept-deco {
+      position: absolute;
+      top: -60px;
+      right: -40px;
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 600;
+      font-size: 9rem;
+      color: rgba(11, 25, 41, 0.04);
+      writing-mode: vertical-rl;
+      pointer-events: none;
+      user-select: none;
+      line-height: 1;
+    }
+
+    .concept-body {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.92rem;
+      font-weight: 300;
+      line-height: 2.6;
+      color: #3c3028;
+    }
+    .concept-body p + p { margin-top: 0.5em; }
+
+    .concept-img-wrap {
+      position: relative;
+    }
+    .concept-img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      border-radius: 2px;
+    }
+    /* Gold offset frame */
+    .concept-img-frame {
+      position: absolute;
+      bottom: -22px;
+      right: -22px;
+      width: 62%;
+      height: 62%;
+      border: 1.5px solid var(--gold);
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    /* Top-left label */
+    .concept-tag {
+      position: absolute;
+      top: -14px;
+      left: 16px;
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      background: var(--white);
+      padding: 3px 12px;
+    }
+
+    /* ─── Menu ────────────────────────────────────────────── */
+    .menu {
+      background: var(--navy);
+      color: var(--white);
+    }
+    .menu .sec-title-en { color: var(--white); }
+    .menu .sec-title-ja { color: rgba(245,240,232,0.38); }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-bottom: 64px;
+    }
+
+    .menu-card {
+      background: var(--navy-mid);
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid rgba(200,164,86,0.12);
+      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 0.35s ease;
+    }
+    .menu-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.45);
+    }
+
+    .menu-card-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: var(--navy-light);
+      transition: transform 0.5s ease;
+    }
+    .menu-card:hover .menu-card-img { transform: scale(1.04); }
+
+    .menu-card-body { padding: 22px 24px 26px; }
+
+    .menu-card-name {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.93rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      line-height: 1.7;
+      margin-bottom: 14px;
+      color: var(--white);
+    }
+
+    .menu-card-price {
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 1.25rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+    .menu-card-price sub {
+      font-size: 0.68rem;
+      opacity: 0.6;
+      margin-left: 3px;
+      vertical-align: baseline;
+    }
+
+    .menu-cta { text-align: center; }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 17px 52px;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 0.88rem;
+      letter-spacing: 0.12em;
+      border-radius: 100px;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.25s ease;
+      cursor: pointer;
+    }
+    .btn-outline:hover {
+      background: var(--gold);
+      color: var(--navy);
+      transform: scale(1.03);
+    }
+
+    /* ─── Gallery ─────────────────────────────────────────── */
+    .gallery { background: var(--cream); }
+    .gallery .sec-title-en { color: var(--navy); }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
+      gap: 14px;
+    }
+    /* Asymmetric offsets */
+    .gallery-item { overflow: hidden; border-radius: 2px; }
+    .gallery-item:nth-child(1) { margin-top: 0; }
+    .gallery-item:nth-child(2) { margin-top: 44px; }
+    .gallery-item:nth-child(3) { margin-top: 0; }
+    .gallery-item:nth-child(4) { margin-top: -28px; }
+
+    .gallery-item img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
+    }
+    .gallery-item:hover img { transform: scale(1.07); }
+
+    /* ─── Access ──────────────────────────────────────────── */
+    .access { background: var(--white); }
+    .access .sec-title-en { color: var(--navy); }
+
+    .access-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .access-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+    .access-item { display: flex; gap: 18px; align-items: flex-start; }
+
+    .access-tag {
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      background: var(--gold-dim);
+      border: 1px solid rgba(200,164,86,0.3);
+      padding: 4px 11px;
+      border-radius: 100px;
+      white-space: nowrap;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .access-val {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: #3c3028;
+    }
+
+    /* Map placeholder */
+    .map-box {
+      background: var(--navy);
+      border-radius: 4px;
+      aspect-ratio: 4 / 3;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+    /* Grid lines texture */
+    .map-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,164,86,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,164,86,0.06) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    /* Dot roads decoration */
+    .map-box::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,164,86,0.15) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(200,164,86,0.1) 2px, transparent 2px);
+      background-size: 140px 120px;
+      background-position: 30px 40px;
+    }
+    .map-pin {
+      font-size: 2.2rem;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+      animation: pinBounce 2s ease-in-out infinite;
+    }
+    @keyframes pinBounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+    .map-label {
+      position: relative;
+      z-index: 1;
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: rgba(245,240,232,0.55);
+    }
+    .map-sublabel {
+      position: relative;
+      z-index: 1;
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: rgba(200,164,86,0.7);
+    }
+
+    /* ─── Footer ──────────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      padding: 52px 9% 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      border-top: 1px solid rgba(200,164,86,0.18);
+    }
+    .footer-logo {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--white);
+      letter-spacing: 0.3em;
+    }
+    .footer-copy {
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      color: rgba(245,240,232,0.28);
+    }
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: rgba(245,240,232,0.4);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ─── Fixed CTA ───────────────────────────────────────── */
+    .fixed-cta {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 600;
+      background: rgba(11, 25, 41, 0.97);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(200,164,86,0.25);
+      padding: 11px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 52px;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Kiwi Maru', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      border-radius: 100px;
+      transition: background 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
+    }
+    .cta-btn:hover {
+      background: var(--gold-lt);
+      transform: scale(1.03);
+      box-shadow: 0 6px 24px rgba(200,164,86,0.4);
+    }
+
+    /* ─── Responsive ──────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .nav-links { display: none; }
+
+      .concept-grid,
+      .access-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+      .concept-img-wrap { order: -1; }
+      .concept-img { aspect-ratio: 16 / 9; }
+      .concept-deco { font-size: 5rem; top: -30px; right: -16px; }
+
+      .menu-grid { grid-template-columns: 1fr; gap: 22px; }
+
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-item:nth-child(2),
+      .gallery-item:nth-child(4) { margin-top: 0; }
+
+      .section { padding: 72px 6%; }
+      .nav { padding: 18px 6%; }
+      .nav.solid { padding: 12px 6%; }
+    }
+
+    @media (max-width: 520px) {
+      .catchcopy { font-size: clamp(1.1rem, 5.5vw, 1.5rem); }
+      .hero-badge { display: none; }
+
+      .gallery-grid { gap: 8px; }
+      .menu-grid { grid-template-columns: 1fr; }
+
+      .btn-outline { padding: 15px 36px; }
+      .cta-btn { padding: 12px 36px; font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       Navigation
+  ══════════════════════════════════════ -->
+  <nav class="nav" id="nav">
+    <div class="nav-logo">
+      鮨 吉兆
+      <small>SUSHI KICCHO — KICHIJOJI</small>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#concept">Concept</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#access">Access</a></li>
+    </ul>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       Hero
+  ══════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-inner">
+      <div class="catchcopy-wrap">
+        <p class="catchcopy">スニーカーで行ける、ご褒美鮨。</p>
+        <p class="catchcopy">回らない。でも、肩はこらない。</p>
+      </div>
+    </div>
+
+    <div class="hero-badge">
+      吉祥寺<br>路地裏<br>江戸前鮨
+    </div>
+
+    <div class="hero-scroll">
+      <div class="scroll-bar"></div>
+      scroll
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       Concept
+  ══════════════════════════════════════ -->
+  <section class="section concept" id="concept">
+    <div class="concept-grid">
+
+      <div class="concept-left">
+        <div class="sec-head reveal">
+          <div class="sec-title-en">Concept</div>
+          <div class="sec-title-ja">-私たちの思い-</div>
+          <div class="sec-rule"></div>
+        </div>
+        <div class="concept-body reveal d1">
+          <p>美味しいお寿司を食べたいけれど、高級店は少し緊張してしまう。</p>
+          <p>そんな20代・30代の皆さまへ。</p>
+          <p>吉祥寺の路地裏に、本格的な江戸前鮨をカジュアルに楽しめる空間を作りました。</p>
+          <p>赤酢のシャリと、毎朝市場で仕入れる新鮮なネタ。</p>
+          <p>お値段は安心価格で、心ゆくまでお腹を満たしてください。</p>
+          <p>今日はちょっとだけ贅沢に、お寿司で乾杯しませんか？</p>
+        </div>
+        <div class="concept-deco" aria-hidden="true">鮨</div>
+      </div>
+
+      <div class="concept-img-wrap reveal d2">
+        <span class="concept-tag">吉祥寺・路地裏</span>
+        <img
+          class="concept-img"
+          src="image/food_6.jpg"
+          alt="店内の様子"
+          loading="lazy"
+        >
+        <div class="concept-img-frame"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       Menu
+  ══════════════════════════════════════ -->
+  <section class="section menu" id="menu">
+    <div class="sec-head reveal">
+      <div class="sec-title-en">Menu</div>
+      <div class="sec-title-ja">-おしながき-</div>
+      <div class="sec-rule"></div>
+    </div>
+
+    <div class="menu-grid">
+
+      <div class="menu-card reveal d1">
+        <img
+          class="menu-card-img"
+          src="image/food_5.jpg"
+          alt="吉祥寺おまかせ握り"
+          loading="lazy"
+        >
+        <div class="menu-card-body">
+          <div class="menu-card-name">吉祥寺おまかせ握り（10貫）</div>
+          <div class="menu-card-price">¥4,500<sub>税込</sub></div>
+        </div>
+      </div>
+
+      <div class="menu-card reveal d2">
+        <img
+          class="menu-card-img"
+          src="image/food_4.jpg"
+          alt="こぼれウニとイクラの小鉢"
+          loading="lazy"
+        >
+        <div class="menu-card-body">
+          <div class="menu-card-name">名物・こぼれウニとイクラの小鉢</div>
+          <div class="menu-card-price">¥1,200<sub>税込</sub></div>
+        </div>
+      </div>
+
+      <div class="menu-card reveal d3">
+        <img
+          class="menu-card-img"
+          src="image/food_3.jpg"
+          alt="季節の日本酒ペアリング"
+          loading="lazy"
+        >
+        <div class="menu-card-body">
+          <div class="menu-card-name">季節の日本酒ペアリング（3種）</div>
+          <div class="menu-card-price">¥1,500<sub>税込</sub></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="menu-cta reveal">
+      <a href="#" class="btn-outline">🍣 おしながきを見る</a>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       Gallery
+  ══════════════════════════════════════ -->
+  <section class="section gallery" id="gallery">
+    <div class="sec-head reveal">
+      <div class="sec-title-en">Gallery</div>
+      <div class="sec-rule"></div>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item reveal d1">
+        <img src="image/food_2.jpg" alt="Gallery 1" loading="lazy">
+      </div>
+      <div class="gallery-item reveal d2">
+        <img src="image/food_4.jpg" alt="Gallery 2" loading="lazy">
+      </div>
+      <div class="gallery-item reveal d3">
+        <img src="image/food_5.jpg" alt="Gallery 3" loading="lazy">
+      </div>
+      <div class="gallery-item reveal d4">
+        <img src="image/food_1.jpg" alt="Gallery 4" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       Access
+  ══════════════════════════════════════ -->
+  <section class="section access" id="access">
+    <div class="sec-head reveal">
+      <div class="sec-title-en">Access</div>
+      <div class="sec-rule"></div>
+    </div>
+
+    <div class="access-grid">
+
+      <div class="access-list">
+        <div class="access-item reveal d1">
+          <span class="access-tag">住所</span>
+          <p class="access-val">〒180-0004<br>東京都武蔵野市吉祥寺本町X-X-X</p>
+        </div>
+        <div class="access-item reveal d2">
+          <span class="access-tag">アクセス</span>
+          <p class="access-val">JR吉祥寺駅 北口より徒歩5分</p>
+        </div>
+        <div class="access-item reveal d3">
+          <span class="access-tag">営業時間</span>
+          <p class="access-val">17:00〜23:00<br>（L.O. 22:30）</p>
+        </div>
+        <div class="access-item reveal d4">
+          <span class="access-tag">定休日</span>
+          <p class="access-val">水曜日</p>
+        </div>
+      </div>
+
+      <div class="map-box reveal d2">
+        <div class="map-pin">📍</div>
+        <div class="map-label">吉祥寺本町 X-X-X</div>
+        <div class="map-sublabel">JR吉祥寺駅 北口 徒歩5分</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       Footer
+  ══════════════════════════════════════ -->
+  <footer>
+    <ul class="footer-links">
+      <li><a href="#concept">Concept</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#access">Access</a></li>
+    </ul>
+    <div class="footer-logo">鮨 吉兆</div>
+    <p class="footer-copy">© 2025 Sushi Kiccho, Kichijoji. All Rights Reserved.</p>
+  </footer>
+
+  <!-- ══════════════════════════════════════
+       Fixed CTA — Web予約
+  ══════════════════════════════════════ -->
+  <div class="fixed-cta">
+    <a href="#" class="cta-btn">🍣 Web予約はこちら</a>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       JavaScript
+  ══════════════════════════════════════ -->
+  <script>
+    /* ── Hero image zoom-out on load ── */
+    const heroBg = document.getElementById('heroBg');
+    window.addEventListener('load', () => {
+      heroBg.classList.add('zoom-out');
+    });
+
+    /* ── Navbar: transparent → solid on scroll ── */
+    const nav = document.getElementById('nav');
+    const onScroll = () => {
+      nav.classList.toggle('solid', window.scrollY > 60);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ── Scroll reveal via IntersectionObserver ── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -48px 0px' }
+    );
+    revealEls.forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
